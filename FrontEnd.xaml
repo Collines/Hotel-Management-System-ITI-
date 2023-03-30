@@ -188,18 +188,48 @@
                     </TabItem>
                     <TabItem Header="Universal Search" Padding="5">
                         <Grid Background="#e7e7e7">
-                                <TextBox Height="40" Margin="30,0,30,0" Padding="5"
-                                         FontSize="20"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Width="1100" Height="40" Margin="40,0,0,0" Padding="5"
+                                         FontSize="20" Text="Search"/>
+                                <Button Background="white" Height="40" Width="60">
+                                    <Image Source="/Images/ic_action_search (3).png" />
+                                </Button>
+                            </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Reservation Advertisement View" Padding="5">
-                        <Grid Background="red">
-                               
+                        <Grid Background="#e7e7e7">
+                            <DataGrid x:Name="ResGrid">
+                                
+                            </DataGrid> 
                         </Grid>
                     </TabItem>
                     <TabItem Header="Room Availability" Padding="5">
-                        <Grid Background="Yellow">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer Background="#e7e7e7" Grid.Column="0" 
+                                          HorizontalScrollBarVisibility="Auto"
+                                          Margin="0,0,5,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="18" Padding="5">Occupied</TextBlock>
+                                    <DataGrid x:Name="OccupiedGrid">
+                                        
+                                    </DataGrid>
+                                </StackPanel>
+                            </ScrollViewer>
+                            <ScrollViewer Background="#e7e7e7" Grid.Column="1" 
+                                          HorizontalScrollBarVisibility="Auto"
+                                          Margin="0,0,5,0">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="18" Padding="5">Reserved</TextBlock>
+                                    <DataGrid x:Name="ReservedGrid">
 
+                                    </DataGrid>
+                                </StackPanel>
+                            </ScrollViewer>
                         </Grid>
 
                     </TabItem>

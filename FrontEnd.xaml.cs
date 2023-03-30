@@ -18,8 +18,6 @@ namespace HotelManagementSystem
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class FrontEnd : Window
-    {
         public enum Months:byte
         {
             January,
@@ -35,10 +33,39 @@ namespace HotelManagementSystem
             November,
             December,
         }
+    class Employee
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+    }
+    public partial class FrontEnd : Window
+    {
         public FrontEnd()
         {
             InitializeComponent();
             InitializeComboBox();
+            List<Employee> list1 = new List<Employee>() {
+                new(){ID=1,Name="Mohamed Salah",Age=26},
+                new(){ID=2,Name="Omar Salah",Age=23},
+                new(){ID=3,Name="Mahmoud Salah",Age=19},
+                new(){ID=4,Name="Mazen Salah",Age=13}
+            };
+            List<Employee> list2 = new List<Employee>() {
+                new(){ID=1,Name="Mohamed Salah",Age=26},
+                new(){ID=2,Name="Omar Salah",Age=23},
+                new(){ID=3,Name="Mahmoud Salah",Age=19},
+                new(){ID=4,Name="Mazen Salah",Age=13}
+            };
+            List<Employee> list3 = new List<Employee>() {
+                new(){ID=1,Name="Mohamed Salah",Age=26},
+                new(){ID=2,Name="Omar Salah",Age=23},
+                new(){ID=3,Name="Mahmoud Salah",Age=19},
+                new(){ID=4,Name="Mazen Salah",Age=13}
+            };
+            ResGrid.ItemsSource = list1;
+            OccupiedGrid.ItemsSource = list2;
+            ReservedGrid.ItemsSource= list3;
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)

@@ -12,6 +12,8 @@
     <None Remove="Images\closex.png" />
     <None Remove="Images\edit.png" />
     <None Remove="Images\hotel.ico" />
+    <None Remove="Images\ic_action_search %283%29.png" />
+    <None Remove="Images\ic_action_search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +29,8 @@
     <Resource Include="Images\closex.png" />
     <Resource Include="Images\edit.png" />
     <Resource Include="Images\hotel.ico" />
+    <Resource Include="Images\ic_action_search (3).png" />
+    <Resource Include="Images\ic_action_search.png" />
   </ItemGroup>
 
 </Project>
