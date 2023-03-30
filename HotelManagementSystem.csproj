@@ -8,11 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\close.png" />
+    <None Remove="Images\closex.png" />
+    <None Remove="Images\edit.png" />
+    <None Remove="Images\hotel.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.entityframeworkcore.sqlserver" Version="7.0.4" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\closex.png" />
+    <Resource Include="Images\edit.png" />
+    <Resource Include="Images\hotel.ico" />
   </ItemGroup>
 
 </Project>
