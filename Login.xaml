@@ -28,7 +28,9 @@
                      Padding="35,5,10,5" x:Name="UsernameText"
                      Grid.Column="1" HorizontalAlignment="Center"
                      TextWrapping="Wrap" Text="Username" VerticalAlignment="Top"
-                     Width="298" Margin="0,137,0,0"/>
+                     Width="298" Margin="0,137,0,0">
+            </TextBox>
+
             <Label FontSize="24" x:Name="PasswordLabel" Grid.Column="1"
                    Content="Password" HorizontalAlignment="Left" Margin="181,187,0,0"
                    VerticalAlignment="Top" RenderTransformOrigin="-0.23,0.062"/>
@@ -37,6 +39,8 @@
                     Grid.Column="1" HorizontalAlignment="Center" Margin="0,240,0,0"
                          VerticalAlignment="Top" Width="298"/>
             <Button FontSize="20" Padding="0,5,0,5" x:Name="SignIn" Grid.Column="1" Content="Sign in" HorizontalAlignment="Center" Margin="0,305,0,0" VerticalAlignment="Top" Width="293" Height="45"/>
+            <Image x:Name="___Images_edit_png" Grid.Column="1" Margin="183,140,443,281" Source="/Images/edit.png" Stretch="Fill" RenderTransformOrigin="0.824,0.627"/>
+            <Image x:Name="___Images_edit_png_Copy" Grid.Column="1" Margin="183,243,443,178" Source="/Images/edit.png" Stretch="Fill" RenderTransformOrigin="0.824,0.627"/>
         </Grid>
 
     </Border>

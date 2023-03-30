@@ -1,0 +1,146 @@
+﻿<Window x:Class="HotelManagementSystem.RoomService"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HotelManagementSystem"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        MouseLeftButtonDown="MoveWindow"
+        Title="Front End" Height="671" Width="1331"
+        Icon="/Images/hotel.ico"
+        >
+    <Border BorderBrush="#00b159" BorderThickness="0,5,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel  Orientation="Horizontal" Panel.ZIndex="100" Grid.Row="0">
+                <StackPanel Panel.ZIndex="100">
+                    <Label Padding="10,0,0,0" FontSize="40">Reservation System</Label>
+                </StackPanel>
+                <StackPanel Margin="860,0,0,0"  Orientation="Horizontal" HorizontalAlignment="Right" Height="42">
+                    <Button x:Name="MinimizeBtn" Padding="5,0,5,0" Margin="0,0,5,3">Test</Button>
+                    <Button x:Name="ResizeBtn" Padding="5,0,5,0" Margin="0,0,5,3">
+                        <Image Source="/Images/resize.jpg" />
+                    </Button>
+                    <Button x:Name="CloseBtn" Click="CloseBtn_Click"
+                        Padding="5,0,5,0"
+                        Background="White"
+                        BorderBrush="red"
+                        BorderThickness="2"
+                        Margin="0,0,5,3">
+                        <Image Source="/Images/closex.png"></Image>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <TabControl  x:Name="tabControl"  Margin="0,-20,0,0" >
+                    <TabItem Padding="10,5,10,5" Header="TODO" BorderBrush="blue" BorderThickness="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border Padding="0,100,0,0" Grid.Column="0" BorderBrush="White" BorderThickness="3">
+                                <StackPanel Orientation="Vertical" Grid.Row="0">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label FontSize="20" Margin="14,5,5,-3">Name</Label>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox FontSize="20" Margin="17,0,7,0" Width="200"></TextBox>
+                                            <TextBox FontSize="20" Width="200"></TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label FontSize="20" Margin="14,5,5,-3">Phone Number</Label>
+                                        <TextBox Name="PhoneTxt" FontSize="20" Margin="17,0,16,0"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Vertical">
+                                            <Label  Margin="14,5,5,-17" FontSize="20">Room Type</Label>
+                                            <TextBox x:Name="RoomType" FontSize="20" 
+                                                     Margin="14,15,0,0" Width="200">Room Type</TextBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label  Margin="8,5,5,-17" FontSize="20">Floor</Label>
+                                            <TextBox x:Name="Floor" FontSize="20" 
+                                                     Margin="7,15,0,0" Width="200">Floor</TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label FontSize="20" Margin="14,5,5,-3">Room #</Label>
+                                        <TextBox Name="RoomNum" FontSize="20" Margin="17,0,16,0" Text="Room #"></TextBox>
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </Border>
+                                <GroupBox BorderBrush="#e7e7e7" BorderThickness="2" Grid.Column="1" Height="400" >
+                                    <GroupBox.Header>
+                                        <Label Margin="5,0,0,0" FontSize="18" FontWeight="bold">Todo</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel>
+                                                <Label FontSize="18" Margin="10,5,5,-3">Breakfast [QTY]</Label>
+                                                <TextBox FontSize="20" Margin="14,0,0,0" Width="200" Text="Breakfast"></TextBox>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <Label FontSize="18" Margin="6,5,5,-3">Lunch [QTY]</Label>
+                                                <TextBox FontSize="20" Margin="10,0,7,0" Width="200" Text="Lunch"></TextBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel>
+                                            <Label FontSize="18" Margin="10,5,5,-3">Dinner [QTY]</Label>
+                                            <TextBox FontSize="20" Margin="14,0,7,0" Width="410" Text="Dinner"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <CheckBox IsEnabled="False" Margin="30" x:Name="CleaningChkBox" Content="Cleaning" />
+                                            <CheckBox IsEnabled="False" Margin="30" x:Name="TowelsChkBox" Content="Towels"/>
+                                            <CheckBox IsEnabled="False" Margin="30" x:Name="SweetestChkBox" Content="Sweetest Surprise"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <CheckBox  Margin="30" x:Name="supplyStatus" Content="Food/Supply Status?" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <Button FontSize="16" Padding="0,8,0,8"
+                                                Margin="14,0,12,0"
+                                                Background="#EEEEEE" Foreground="#00b159"
+                                                FontWeight="Bold">
+                                                Change Food Selection
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                            <Border Grid.Column="2" BorderBrush="White" 
+                                    Height="400" BorderThickness="3">
+                                <StackPanel>
+                                    <ScrollViewer Height="278">
+                                        <ListBox BorderBrush="#7e7e7e" BorderThickness="2" x:Name="OnTheLine" Padding="10"/>
+                                    </ScrollViewer>
+                                            <Button BorderBrush="#a8a8a8" FontWeight="Bold"
+                                                    BorderThickness="2" Background="#eeeeee"
+                                                    Foreground="#00b159" Margin="10,30,10,0" 
+                                                    Padding="0,8,0,8" FontSize="16" 
+                                                    Content="Update Changes"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Overview" Padding="5">
+                        <Grid Background="white">
+                            <ScrollViewer Padding="20">
+
+                                <DataGrid x:Name="OverviewGrid"  BorderBrush="green" BorderThickness="3" />
+                                
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                  
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

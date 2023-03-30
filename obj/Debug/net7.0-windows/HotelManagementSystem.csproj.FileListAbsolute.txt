@@ -63,3 +63,5 @@ D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\ob
 D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\obj\Debug\net7.0-windows\Login.baml
 D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\obj\Debug\net7.0-windows\FrontEnd.g.cs
 D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\obj\Debug\net7.0-windows\FrontEnd.baml
+D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\obj\Debug\net7.0-windows\RoomService.g.cs
+D:\ITI\Solutions\Advanced C#\Day11\Mohamed Salah\Hotel-Management-System-ITI-\obj\Debug\net7.0-windows\RoomService.baml

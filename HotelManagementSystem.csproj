@@ -33,4 +33,10 @@
     <Resource Include="Images\ic_action_search.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="RoomService.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
