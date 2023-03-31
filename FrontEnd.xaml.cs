@@ -18,21 +18,7 @@ namespace HotelManagementSystem
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-        public enum Months:byte
-        {
-            January,
-            February,
-            March,
-            April,
-            May,
-            June,
-            July,
-            August,
-            September,
-            October,
-            November,
-            December,
-        }
+
     class Employee
     {
         public int ID { get; set; }
