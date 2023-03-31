@@ -7,11 +7,17 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="FoodMenu.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="FrontEnd.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="FoodMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="RoomService.xaml">
       <SubType>Designer</SubType>
     </Page>
