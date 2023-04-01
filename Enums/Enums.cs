@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace HotelManagementSystem
 {
     public enum Gender : byte
@@ -46,5 +41,10 @@ namespace HotelManagementSystem
         October,
         November,
         December,
+    }
+    public enum AccountType:byte
+    {
+        KitchenAccount,
+        FrontendAccount
     }
 }

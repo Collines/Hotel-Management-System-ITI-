@@ -19,9 +19,9 @@ namespace HotelManagementSystem
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class Login : Window
+    public partial class Register : Window
     {
-        public Login()
+        public Register()
         {
             InitializeComponent();
         }
@@ -44,20 +44,20 @@ namespace HotelManagementSystem
                     Tbx.Text = "";
             }
             else if (sender is PasswordBox PwdBox)
-                {
-                    if (PwdBox?.Password == "Password")
-                        PwdBox.Password = "";
-                }
+            {
+                if (PwdBox?.Password == "Password")
+                    PwdBox.Password = "";
+            }
         }
 
         private void RemovedFocus(object sender, RoutedEventArgs e)
         {
-            if(sender is TextBox Tbx)
+            if (sender is TextBox Tbx)
             {
                 if (Tbx?.Text.Length == 0)
                     Tbx.Text = "Username";
             }
-            else if(sender is PasswordBox PwdBox)
+            else if (sender is PasswordBox PwdBox)
             {
                 if (PwdBox?.Password.Length == 0)
                     PwdBox.Password = "Password";

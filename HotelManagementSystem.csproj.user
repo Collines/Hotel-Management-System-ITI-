@@ -13,9 +13,15 @@
     <Compile Update="FrontEnd.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Register.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="FoodMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Register.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="RoomService.xaml">
