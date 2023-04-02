@@ -25,7 +25,7 @@ namespace HotelManagementSystem
     /// </summary>
     public partial class Login : Window
     {
-        LoginDB LoginDBContext = new();
+        LoginDB LoginDBContext= new();
         public Login()
         {
             InitializeComponent();

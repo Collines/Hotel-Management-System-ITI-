@@ -4,6 +4,7 @@ using HotelManagementSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 {
     [DbContext(typeof(FrontendDB))]
-    partial class FrontendDBModelSnapshot : ModelSnapshot
+    [Migration("20230402164836_RemovingPaymentColumnFromGuest")]
+    partial class RemovingPaymentColumnFromGuest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,23 +24,6 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("HotelManagementSystem.Entities.City", b =>
-                {
-                    b.Property<int>("CityID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CityID");
-
-                    b.ToTable("Cities");
-                });
 
             modelBuilder.Entity("HotelManagementSystem.Entities.Guest", b =>
                 {
@@ -53,8 +39,10 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                     b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CityID")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -95,8 +83,6 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("GuestID");
-
-                    b.HasIndex("CityID");
 
                     b.ToTable("Guests");
                 });
@@ -225,17 +211,6 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                     b.HasIndex("RoomID");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("HotelManagementSystem.Entities.Guest", b =>
-                {
-                    b.HasOne("HotelManagementSystem.Entities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Entities.Payment", b =>

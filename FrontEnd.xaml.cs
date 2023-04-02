@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelManagementSystem.Context;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,10 +28,32 @@ namespace HotelManagementSystem
     }
     public partial class FrontEnd : Window
     {
+        FrontendDB DB = new FrontendDB();
         public FrontEnd()
         {
             InitializeComponent();
             InitializeComboBox();
+            InitializeAll();
+            
+        }
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void MoveWindow(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void InitializeAll()
+        {
+            InitializeComboBox();
+            City.ItemsSource = DB.Cities.ToList();
+            City.DisplayMemberPath = "Name";
+            City.SelectedValuePath = "CityID";
+            NoOfGuests.ItemsSource = Enumerable.Range(1, 15).ToList();
             List<Employee> list1 = new List<Employee>() {
                 new(){ID=1,Name="Mohamed Salah",Age=26},
                 new(){ID=2,Name="Omar Salah",Age=23},
@@ -51,23 +74,14 @@ namespace HotelManagementSystem
             };
             ResGrid.ItemsSource = list1;
             OccupiedGrid.ItemsSource = list2;
-            ReservedGrid.ItemsSource= list3;
-        }
+            ReservedGrid.ItemsSource = list3;
 
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void MoveWindow(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
         }
 
         private void InitializeComboBox()
         {
             int Days = 0;
-            ComboBoxItem selectedItem = (ComboBoxItem)BDMonthCombo?.SelectedItem;
+            ComboBoxItem selectedItem = (ComboBoxItem)BirthMonth?.SelectedItem;
             if(Enum.TryParse<Months>(selectedItem?.Content?.ToString(), out Months M))
             {
                 switch (M)
@@ -116,12 +130,12 @@ namespace HotelManagementSystem
             }
             if(Days>0)
             {
-                BDDayCombo?.Items.Clear();
+                BirthDay?.Items.Clear();
                 for(int i=1;i<=Days;i++)
                 {
                     ComboBoxItem item = new();
                     item.Content = i;
-                    BDDayCombo?.Items.Add(i);
+                    BirthDay?.Items.Add(i);
                 }
             }
         }
@@ -129,6 +143,12 @@ namespace HotelManagementSystem
         private void MonthComboChange(object sender, SelectionChangedEventArgs e)
         {
             InitializeComboBox();
+        }
+
+        private void FoodMenuClick(object sender, RoutedEventArgs e)
+        {
+            FoodMenu foodMenu = new FoodMenu();
+            foodMenu.ShowDialog();
         }
     }
 }

@@ -16,6 +16,9 @@
     <Compile Update="Register.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="FinalizePayment.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="FoodMenu.xaml">
@@ -31,6 +34,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="FrontEnd.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FinalizePayment.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

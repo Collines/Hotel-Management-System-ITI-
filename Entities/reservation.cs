@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelManagementSystem.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,57 +11,8 @@ public partial class Reservation
     [Key]
     public int ReservationID { get; set; }
 
-    [MaxLength(50)]
-    public string FirstName { get; set; }
-
-    [MaxLength(50)]
-    public string LastName { get; set; }
-
-    public DateTime Birthday { get; set; }
-
-    public Gender Gender { get; set; }
-
-    [MaxLength(20)]
-    public string Phone { get; set; }
-
-    [MaxLength(50)]
-    public string Email { get; set; }
-
     public int NumberOfGuests { get; set; }
-
-    [MaxLength(50)]
-    public string StreetAddress { get; set; }
-
-    public int ApartmentSuite { get; set; }
-
-    [MaxLength(20)]
-    public string City { get; set; }
-
-    [MaxLength(20)]
-    public string State { get; set; }
-
-    [MaxLength(10)]
-    public string ZipCode { get; set; }
-
-    public RoomType RoomType { get; set; }
-
-    public int RoomFloor { get; set; }
-
-    public int RoomNumber { get; set; }
-    [Column(TypeName ="Money")]
-    public double TotalBill { get; set; }
-
-    public PaymentType PaymentType { get; set; }
-
-    public CardType CardType { get; set; }
-    [MaxLength(16)]
-    public string CardNumber { get; set; }
-
-    public DateTime CardExpireDate { get; set; }
-
-    [MaxLength(3)]
-    public string CardCVC { get; set; }
-
+    
     public DateTime ArrivalTime { get; set; }
 
     public DateTime LeavingTime { get; set; }
@@ -82,4 +34,7 @@ public partial class Reservation
     public bool SupplyStatus { get; set; }
 
     public int FoodBill { get; set; }
+
+    public virtual Guest Guest { get; set; }
+    public virtual Room Room { get; set; }
 }
