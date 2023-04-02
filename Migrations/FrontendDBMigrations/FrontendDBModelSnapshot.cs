@@ -148,7 +148,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.HasKey("ReservationID");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 #pragma warning restore 612, 618
         }

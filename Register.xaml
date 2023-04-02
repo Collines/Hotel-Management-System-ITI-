@@ -65,10 +65,10 @@
                            Margin="-150,0,0,0"
                        VerticalAlignment="Top"/>
                     <ComboBox Padding="35,8,8,8" Margin="0,0,0,0" Width="298"
-                               IsEditable="True"
+                               IsEditable="True" Name="accountTypeCombo"
                                FontSize="18"
                               Text="Account Type">
-                        <ComboBoxItem>Kitchen</ComboBoxItem>
+                        <ComboBoxItem >Kitchen</ComboBoxItem>
                         <ComboBoxItem>Frontend</ComboBoxItem>
                     </ComboBox>
                     <Canvas>
@@ -76,8 +76,8 @@
                     </Canvas>
                 </StackPanel>
                 <Button FontSize="20" Padding="0,5,0,5" 
-                        x:Name="SignIn" Grid.Column="1" Content="Register" 
-                        HorizontalAlignment="Center"
+                        x:Name="RegisterBtn" Grid.Column="1" Content="Register" 
+                        HorizontalAlignment="Center" Click="RegisterClick"
                         Margin="0,30,0,0"
                         VerticalAlignment="Top" Width="293" Height="45"/>
                 

@@ -19,7 +19,7 @@
             </Grid.RowDefinitions>
             <StackPanel  Orientation="Horizontal" Panel.ZIndex="100" Grid.Row="0">
                 <StackPanel Panel.ZIndex="100">
-                    <Label Padding="10,0,0,0" FontSize="40">Reservation System</Label>
+                    <Label Padding="10,0,0,0" FontSize="40">Room Service</Label>
                 </StackPanel>
                 <StackPanel Margin="860,0,0,0"  Orientation="Horizontal" HorizontalAlignment="Right" Height="42">
                     <Button x:Name="MinimizeBtn" Padding="5,0,5,0" Margin="0,0,5,3">Test</Button>

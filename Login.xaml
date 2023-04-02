@@ -13,10 +13,6 @@
         Title="Login" Height="464" Width="688">
     <Border BorderThickness="0,10,0,0" BorderBrush="#47B5FF" CornerRadius="5">
         <Grid>
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="24*"/>
-            </Grid.ColumnDefinitions>-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="2.5*"></RowDefinition>
                 <RowDefinition Height="11*"></RowDefinition>
@@ -65,7 +61,7 @@
 
                 <Button FontSize="20" Padding="0,5,0,5" 
                         x:Name="SignIn" Grid.Column="1" Content="Sign in" 
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Center" Click="SignInClick"
                         Margin="0,30,0,0"
                         VerticalAlignment="Top" Width="293" Height="45"/>
 

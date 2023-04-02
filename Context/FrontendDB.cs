@@ -11,9 +11,11 @@ namespace HotelManagementSystem.Context
     class FrontendDB:DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer("Server=DESKTOP-VREBPAN\\MSSQLSERVER17;Database=FRONTEND_RESERVATION;"+
+            => optionsBuilder.UseSqlServer("Server=DESKTOP-VREBPAN\\MSSQLSERVER17;Database=FRONTEND;"+
                 "Trusted_Connection=True;Encrypt=False");
 
         public virtual DbSet<Reservation> Reservations { get; set; }
+
+        
     }
 }
