@@ -19,7 +19,8 @@ namespace HotelManagementSystem.Entities
 
         [MaxLength(16)]
         public string CardNumber { get; set; }
-        public DateTime CardExpireDate { get; set; }
+        public int ExpireYear { get; set; }
+        public int ExpireMonth { get; set;}
 
         [MaxLength(3)]
         public string CardCVC { get; set; }

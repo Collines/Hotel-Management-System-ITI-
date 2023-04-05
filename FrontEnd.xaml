@@ -72,9 +72,8 @@
                                                 <ComboBoxItem Content="November"></ComboBoxItem>
                                                 <ComboBoxItem Content="December"></ComboBoxItem>
                                             </ComboBox>
-                                            <ComboBox FontSize="20" Padding="20,3,3,3" Name="BirthDay"
+                                            <ComboBox FontSize="20" Padding="20,3,3,3" Name="BirthDayCombo"
                                                       Margin="3.5,0,7,0" Width="130">
-                                                <ComboBoxItem></ComboBoxItem>
                                             </ComboBox>
                                             <TextBox FontSize="20" Padding="5,3,3,3" Name="BirthYear"
                                                      Width="130" Text="Year"></TextBox>
@@ -99,37 +98,53 @@
                                                  Margin="17,0,16,0"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBox Name="StreetAddress" FontSize="20" Margin="17,15,16,0" Text="Street Address"></TextBox>
+                                        <Label Margin="14,5,5,-3">Address</Label>
+                                        <TextBox Name="StreetAddress" FontSize="20" Margin="17,0,16,0" Text=""></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox x:Name="Appartment" FontSize="20" 
-                                                 Margin="17,15,7,0" Width="200">Appt/Suite</TextBox>
-                                        <TextBox x:Name="State" FontSize="20"
-                                                 Margin="0,15,7,0" Width="195">State</TextBox>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Margin="14,5,5,-3">Appartment</Label>
+                                            <TextBox x:Name="Appartment" FontSize="20" 
+                                                 Margin="17,0,7,0" Width="200"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Margin="0,5,5,-3">Zone </Label>
+                                            <TextBox x:Name="State" FontSize="20"
+                                                 Margin="0,0,7,0" Width="195"></TextBox>
+                                        </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <ComboBox  FontSize="20" Margin="17,15,7,0"
+                                        <StackPanel>
+                                            <Label Visibility="Hidden"  Margin="0,5,5,-3">Zone</Label>
+                                            <ComboBox  FontSize="20" Margin="17,0,7,0"
                                                    Name="City" Width="200" IsEditable="true" Text="City">
-                                            <!--<ComboBoxItem IsSelected="True">Cairo</ComboBoxItem>-->
-                                        </ComboBox>
-                                        <TextBox FontSize="20" Margin="0,15,7,0" Width="195">Zip Code</TextBox>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            <Label Margin="0,5,5,-3">Zip Code</Label>
+
+                                            <TextBox FontSize="20" Margin="0,0,7,0" 
+                                                 Name="Zipcode" Padding="2" Width="195"></TextBox>
+                                        </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
                             <Border Grid.Column="1" BorderBrush="White" BorderThickness="3">
                                 <StackPanel Orientation="Vertical" Grid.Row="0">
                                     <StackPanel Orientation="Vertical">
-                                        <Label Margin="14,5,5,-3">Your Choices</Label>
+                                        <Label Margin="14,5,5,-3">Number Of Guests</Label>
                                         <StackPanel Orientation="Horizontal">
                                             
                                             <ComboBox FontSize="20" Margin="17,0,7,0" IsEditable="true"
-                                                      Name="NoOfGuests" Width="200" Text="# of Guests">
+                                                      Name="NoOfGuests" Width="200" Text="# of Guests"
+                                                      SelectionChanged="RoomPriceEvent">
               
                                             </ComboBox>
            
                                             <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
-                                                      IsEditable="true" Text="Room Type">
-                                                <ComboBoxItem>Single</ComboBoxItem>
+                                                      IsEditable="true" Text="Room Type"
+                                                      Name="RoomTypeCombo" SelectionChanged="FloorRoomTypeChange">
+                                                <ComboBoxItem IsSelected="true">Single</ComboBoxItem>
                                                 <ComboBoxItem>Double</ComboBoxItem>
                                                 <ComboBoxItem>Duplex</ComboBoxItem>
                                                 <ComboBoxItem>Suite</ComboBoxItem>
@@ -138,26 +153,31 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
-
-                                            <ComboBox FontSize="20" Margin="17,30,7,0" 
-                                                      Name="Floor" Width="200"
-                                                      IsEditable="True" Text="Floor">
-                                            </ComboBox>
+                                                
+                                            <StackPanel>
+                                                <Label Margin="14,5,5,-3">Floor</Label>
+                                                <ComboBox FontSize="20" Margin="17,3,7,0" 
+                                                      Name="Floor" Width="200" 
+                                                      IsEditable="True" Text="Floor" SelectionChanged="FloorRoomTypeChange">
+                                                </ComboBox>
+                                            </StackPanel>
                                             
                                             <ComboBox FontSize="20" Margin="0,30,7,0" Width="200"
-                                                      IsEditable="True" Text="Room Number" Name="RoomNumber">
+                                                      IsEditable="True" Text="Room Number" 
+                                                      Name="RoomNumber" SelectionChanged="RoomPriceEvent">
                                             </ComboBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Entry Date</Label>
                                         <DatePicker VerticalAlignment="Center" FontSize="18" 
-                                                    Name="EntryDate" Margin="14,0,12,0" />
+                                                    Name="EntryDate" Margin="14,0,12,0" SelectedDateChanged="RoomPriceEvent" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Departure Date</Label>
                                         <DatePicker VerticalAlignment="Center" FontSize="18"
                                                     Name="DepartureDate" Margin="14,0,12,0"
+                                                    SelectedDateChanged="RoomPriceEvent"
                                                      />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
@@ -167,10 +187,11 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <CheckBox Margin="30" x:Name="CheckIn" Content="Check in?" />
                                         <CheckBox Margin="30" x:Name="SendSMS" Content="Send SMS"/>
-                                        <CheckBox IsEnabled="False" Margin="30" x:Name="FoodSupply" Content="Food/Supply Status?"/>
+                                        <CheckBox  Margin="30" x:Name="FoodSupply" Content="Food/Supply Status?"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
-                                        <Button FontSize="18" Padding="0,8,0,8" Margin="14,0,12,0">Finalize Bill</Button>
+                                        <Button FontSize="18" Padding="0,8,0,8"
+                                                Click="FinlizeBillClick" Margin="14,0,12,0">Finalize Bill</Button>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
@@ -198,7 +219,7 @@
                                             <Button BorderBrush="#a8a8a8" FontWeight="Bold" BorderThickness="1"
                                                 Background="#eeeeee"
                                                 Foreground="#00b159" Margin="10,20,10,0"  Padding="0,8,0,8" FontSize="16" 
-                                                Content="New Reservation"/>
+                                                Content="New Reservation" Click="NewReservationClick"/>
                                         </StackPanel>
                                     </Canvas>
                                 </StackPanel>

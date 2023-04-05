@@ -4,6 +4,7 @@ using HotelManagementSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 {
     [DbContext(typeof(FrontendDB))]
-    partial class FrontendDBModelSnapshot : ModelSnapshot
+    [Migration("20230402201611_SetDefaultValueForIsReservedRoomEntity")]
+    partial class SetDefaultValueForIsReservedRoomEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,6 +117,9 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                         .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)");
 
+                    b.Property<DateTime>("CardExpireDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
@@ -121,12 +127,6 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.Property<byte>("CardType")
                         .HasColumnType("tinyint");
-
-                    b.Property<int>("ExpireMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExpireYear")
-                        .HasColumnType("int");
 
                     b.Property<int>("GuestID")
                         .HasColumnType("int");
@@ -153,25 +153,20 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomID"));
 
                     b.Property<bool>("IsReserved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<int>("RoomFloor")
                         .HasColumnType("int");
 
                     b.Property<string>("RoomNumber")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<byte>("RoomType")
                         .HasColumnType("tinyint");
 
                     b.HasKey("RoomID");
-
-                    b.HasIndex("RoomNumber")
-                        .IsUnique();
 
                     b.ToTable("Rooms");
                 });

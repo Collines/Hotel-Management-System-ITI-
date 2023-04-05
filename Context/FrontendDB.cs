@@ -17,6 +17,8 @@ namespace HotelManagementSystem.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Room>().HasQueryFilter(R => R.IsReserved == false);
+            modelBuilder.Entity<Room>().HasIndex(R=>R.RoomNumber).IsUnique();
+            modelBuilder.Entity<Room>().Property(R => R.IsReserved).HasDefaultValue(false);
         }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Guest> Guests { get; set; }
