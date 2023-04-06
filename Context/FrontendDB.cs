@@ -25,6 +25,7 @@ namespace HotelManagementSystem.Context
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<City> Cities { get; set; }
+
         
     }
 }

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,7 +88,13 @@ namespace HotelManagementSystem
                                                                     && (R.RoomType == RT)).ToList();
             RoomNumber.DisplayMemberPath = "RoomNumber";
             RoomNumber.SelectedValuePath = "RoomID";
-
+            SelectReservation.ItemsSource = DB.Reservations.Include("Guest").Select(R => new
+            {
+                DisplayedData = $"{R.ReservationID} | {R.Guest.FirstName} {R.Guest.LastName}",
+                ReservationID = R.ReservationID
+            }).ToList();
+            SelectReservation.SelectedValuePath = "ReservationID";
+            SelectReservation.DisplayMemberPath = "DisplayedData";
         }
 
         private void InitializeComboBox()
@@ -193,17 +200,17 @@ namespace HotelManagementSystem
                 Errors.Add("Enter Lastname");
             if (!int.TryParse(BirthYear.Text, out int year))
                 Errors.Add("Enter Birth Year");
-            if (PhoneNumber.Text?.Length == 0)
-                Errors.Add("Enter Phone number");
-            if (Email.Text?.Length == 0)
-                Errors.Add("Enter Email address");
+            if (PhoneNumber.Text?.Length == 0 || Regex.Matches(PhoneNumber.Text, "^([0-9]*)$").Count ==0)
+                Errors.Add("Enter a valid Phone number");
+            if (Email.Text?.Length == 0 || Regex.Matches(Email.Text, "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").Count == 0)
+                Errors.Add("Enter a valid Email address");
             if (StreetAddress.Text?.Length == 0)
                 Errors.Add("Enter your address");
-            if (Appartment.Text?.Length == 0)
+            if (Appartment.Text?.Length == 0 || Regex.Matches(Appartment.Text, "^(0|[1-9][0-9]*)$").Count == 0)
                 Errors.Add("Enter your appartment");
             if (State.Text?.Length == 0)
                 Errors.Add("Enter your state");
-            if (Zipcode.Text?.Length == 0)
+            if (Zipcode.Text?.Length == 0 || Regex.Matches(Zipcode.Text, "^(0|[1-9][0-9]*)$").Count == 0)
                 Errors.Add("Enter your Zipcode");
             if (City.SelectedValue == null || (Int32)City.SelectedValue == 0)
                 Errors.Add("Enter your city");
@@ -240,10 +247,10 @@ namespace HotelManagementSystem
             //
             if (RoomNumber.SelectedValue == null || (Int32)RoomNumber.SelectedValue == 0)
                 Errors.Add("Please Pick a room");
-            if (!DateTime.TryParse(EntryDate.Text, out DateTime r))
+            if (!DateTime.TryParse(EntryDate.Text, out DateTime r) || Convert.ToDateTime(EntryDate.Text) < DateTime.Now)
                 Errors.Add("Enter valid Entry date");
-            if (!DateTime.TryParse(DepartureDate.Text, out DateTime d))
-                Errors.Add("Enter valid departure date");
+            if (!DateTime.TryParse(DepartureDate.Text, out DateTime d) || Convert.ToDateTime(DepartureDate.Text) <= Convert.ToDateTime(EntryDate.Text))
+                Errors.Add("Enter valid departure date (Date should be in future)");
 
             if(Errors.Count > 0)
             {
@@ -267,7 +274,7 @@ namespace HotelManagementSystem
                     SSurprise = SweetestSurprise,
                     SupplyStatus = (bool)FoodSupply.IsChecked ? true : false,
                 };
-
+                DB.Rooms.Find(RoomNumber.SelectedValue).IsReserved = true;
                 Payment payment = new Payment()
                 {
                     PaymentType = FP.PaymentType,

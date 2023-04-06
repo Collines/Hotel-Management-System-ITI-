@@ -115,9 +115,9 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
-                                            <Label Visibility="Hidden"  Margin="0,5,5,-3">Zone</Label>
+                                            <Label Margin="17,5,5,-3">City</Label>
                                             <ComboBox  FontSize="20" Margin="17,0,7,0"
-                                                   Name="City" Width="200" IsEditable="true" Text="City">
+                                                   Name="City" Width="200">
                                             </ComboBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Vertical">
@@ -132,40 +132,43 @@
                             <Border Grid.Column="1" BorderBrush="White" BorderThickness="3">
                                 <StackPanel Orientation="Vertical" Grid.Row="0">
                                     <StackPanel Orientation="Vertical">
-                                        <Label Margin="14,5,5,-3">Number Of Guests</Label>
+                                        
                                         <StackPanel Orientation="Horizontal">
-                                            
-                                            <ComboBox FontSize="20" Margin="17,0,7,0" IsEditable="true"
-                                                      Name="NoOfGuests" Width="200" Text="# of Guests"
+                                            <StackPanel Orientation="Vertical">
+                                                <Label Margin="14,5,5,-3">Number Of Guests</Label>
+                                                <ComboBox FontSize="20" Margin="17,0,7,0"
+                                                      Name="NoOfGuests" Width="200"
                                                       SelectionChanged="RoomPriceEvent">
-              
-                                            </ComboBox>
-           
-                                            <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
-                                                      IsEditable="true" Text="Room Type"
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Vertical">
+                                                <Label Margin="0,5,5,-3">Room Type</Label>
+                                                <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
                                                       Name="RoomTypeCombo" SelectionChanged="FloorRoomTypeChange">
-                                                <ComboBoxItem IsSelected="true">Single</ComboBoxItem>
-                                                <ComboBoxItem>Double</ComboBoxItem>
-                                                <ComboBoxItem>Duplex</ComboBoxItem>
-                                                <ComboBoxItem>Suite</ComboBoxItem>
-                                            </ComboBox>
+                                                    <ComboBoxItem IsSelected="true">Single</ComboBoxItem>
+                                                    <ComboBoxItem>Double</ComboBoxItem>
+                                                    <ComboBoxItem>Duplex</ComboBoxItem>
+                                                    <ComboBoxItem>Suite</ComboBoxItem>
+                                                </ComboBox>
+                                            </StackPanel>
+
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
-                                                
                                             <StackPanel>
                                                 <Label Margin="14,5,5,-3">Floor</Label>
                                                 <ComboBox FontSize="20" Margin="17,3,7,0" 
                                                       Name="Floor" Width="200" 
-                                                      IsEditable="True" Text="Floor" SelectionChanged="FloorRoomTypeChange">
+                                                       SelectionChanged="FloorRoomTypeChange">
                                                 </ComboBox>
                                             </StackPanel>
-                                            
-                                            <ComboBox FontSize="20" Margin="0,30,7,0" Width="200"
-                                                      IsEditable="True" Text="Room Number" 
+                                            <StackPanel Orientation="Vertical">
+                                                <Label Margin="-1,5,0,0">Room Number</Label>
+                                                <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
                                                       Name="RoomNumber" SelectionChanged="RoomPriceEvent">
-                                            </ComboBox>
+                                                </ComboBox>
+                                            </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
@@ -197,10 +200,13 @@
                             </Border>
                             <Border Grid.Column="2" BorderBrush="White" BorderThickness="3">
                                 <StackPanel>
-                                        <ComboBox Background="White" Margin="12,25,12,12" Padding="10"/>
-                                    <Canvas>
-                                        <TextBlock Canvas.Top="-43" Canvas.Left="30" FontSize="18">Select Reservation to edit</TextBlock>
-                                    </Canvas>
+
+                                    <StackPanel>
+                                        <Label Margin="10,5,0,0">Select Reservation to Edit</Label>
+                                        <ComboBox Background="White" Margin="12,2,12,12" 
+                                                  Name="SelectReservation" Padding="10"/>
+                                    </StackPanel>
+                                   
                                     <Canvas>
                                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Vertical"
                                                     Width="400" Canvas.Bottom="0" Canvas.Left="18" Canvas.Top="230">

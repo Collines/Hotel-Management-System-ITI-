@@ -86,8 +86,13 @@ namespace HotelManagementSystem
 
         private void NextClick(object sender, RoutedEventArgs e)
         {
-            if (PaymentTypeCombo.SelectedIndex != null)
+            if (PaymentTypeCombo.SelectedIndex != null && PaymentTypeCombo.SelectedIndex >= 0)
                 PaymentType = (PaymentType)(PaymentTypeCombo.SelectedIndex + 1);
+            else
+            {
+                CustomMessageBox.Show("Enter a valid Payment Type", "Enter valid values", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if(CardNumber.Text.Length == 0 || CardType == CardType.Unknown)
             {
                 CustomMessageBox.Show("Enter a valid Card number", "Enter valid values", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -98,17 +103,20 @@ namespace HotelManagementSystem
             }
             
             //MonthCombo?.SelectedValue?.ToString()?.Length;
-            if (MonthCombo?.SelectedValue?.ToString()?.Length > 0 && YearCombo?.SelectedValue?.ToString()?.Length >0)
+            if (MonthCombo?.SelectedValue?.ToString()?.Length > 0 && 
+                YearCombo?.SelectedValue?.ToString()?.Length >0 &&
+                int.TryParse(MonthCombo.SelectedValue.ToString(), out int M) && 
+                int.TryParse(YearCombo.SelectedValue.ToString(), out int Y))
             {
-                CardExpireMonth = int.Parse(MonthCombo.SelectedValue.ToString());
-                CardExpireYear = int.Parse(YearCombo.SelectedValue.ToString());
+                    CardExpireMonth = M;
+                    CardExpireYear = Y;
             } else
             {
                 CustomMessageBox.Show("Enter a valid Expire Date", "Enter valid values", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if(CVCTXT.Text.Length > 0)
+            if(CVCTXT.Text.Length > 0 && int.TryParse(CVCTXT.Text, out int C))
                 CVC = CVCTXT?.Text;
             else
             {

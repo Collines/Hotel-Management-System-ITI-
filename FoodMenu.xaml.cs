@@ -35,11 +35,20 @@ namespace HotelManagementSystem
             FoodPrice = 0;
             ServicesPrice = 0;
             if(BreakfastPrice.IsChecked == true && int.TryParse(BreakfastQuantity.Text,out int BreakfastQ))
+            {
                 FoodPrice += BreakfastQ * 7;
+                CallerWindow.Breakfast = BreakfastQ;
+            }
             if(LunchPrice.IsChecked == true && int.TryParse(LunchQuantity.Text, out int LunchQ))
+            {
                 FoodPrice += LunchQ * 15;
-            if(DinnerPrice.IsChecked == true && int.TryParse(DinnerQuantity.Text, out int DinnerQ))
+                CallerWindow.Lunch = LunchQ;
+            }
+            if (DinnerPrice.IsChecked == true && int.TryParse(DinnerQuantity.Text, out int DinnerQ))
+            {
                 FoodPrice += DinnerQ * 15;
+                CallerWindow.Dinner = DinnerQ;
+            }
             if (Towels.IsChecked == true)
             {
                 ServicesPrice += 20;
