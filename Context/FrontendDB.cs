@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-using HotelManagementSystem.Entities;
+using HotelManagementSystem;
 
-namespace HotelManagementSystem.Context
+namespace HotelManagementSystem
 {
     class FrontendDB:DbContext
     {
@@ -19,6 +19,9 @@ namespace HotelManagementSystem.Context
             modelBuilder.Entity<Room>().HasQueryFilter(R => R.IsReserved == false);
             modelBuilder.Entity<Room>().HasIndex(R=>R.RoomNumber).IsUnique();
             modelBuilder.Entity<Room>().Property(R => R.IsReserved).HasDefaultValue(false);
+            //modelBuilder.Entity<Guest>().HasKey(G => new { G.GuestID, G.Email });
+
+            //modelBuilder.Entity<Reservation>().HasOne(R => R.Payment).WithOne(P => P.Reservation).OnDelete(DeleteBehavior.NoAction);
         }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<Guest> Guests { get; set; }
@@ -26,6 +29,6 @@ namespace HotelManagementSystem.Context
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<City> Cities { get; set; }
 
-        
+    
     }
 }

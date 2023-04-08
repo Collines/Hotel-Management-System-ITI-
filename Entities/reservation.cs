@@ -1,5 +1,4 @@
-﻿using HotelManagementSystem.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +7,6 @@ namespace HotelManagementSystem;
 
 public partial class Reservation
 {
-    [Key]
     public int ReservationID { get; set; }
 
     public int NumberOfGuests { get; set; }
@@ -33,8 +31,9 @@ public partial class Reservation
 
     public bool SupplyStatus { get; set; }
 
-    public int FoodBill { get; set; }
-
+    [ForeignKey("Room")]
+    public int RoomID { get; set; }
     public virtual Guest Guest { get; set; }
     public virtual Room Room { get; set; }
+
 }

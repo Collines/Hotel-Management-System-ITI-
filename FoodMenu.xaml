@@ -11,6 +11,9 @@
         MouseLeftButtonDown="MoveWindow"
         Icon="Images/hotel.ico"
         Title="FoodMenu" Height="700" Width="712">
+    <Window.DataContext>
+        <local:Reservation></local:Reservation>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*"></RowDefinition>
@@ -39,7 +42,7 @@
             <StackPanel Grid.Row="1" Grid.Column="0">
                 <Image Margin="10" Source="/Images/breakfast.png" Height="105" Width="156" />
                 <CheckBox Name="BreakfastPrice" Margin="10"
-                          Checked="CheckBoxChecked" Unchecked="CheckBoxChecked">Breakfast  ($7)</CheckBox>
+                          Checked="CheckBoxChecked" Unchecked="CheckBoxChecked" IsChecked="{Binding Breakfast}">Breakfast  ($7)</CheckBox>
                 <Label Name="BreakfastLabel" Visibility="Hidden" Foreground="red"
                        FontWeight="Bold" Margin="10,0,0,0"
                        >
@@ -48,13 +51,14 @@
                 <TextBox Padding="10,0,0,0" FontSize="18"
                          Margin="10" Name="BreakfastQuantity"
                          GotFocus="FocusEvent" LostFocus="LostFocusEvent"
-                         IsEnabled="{Binding ElementName=BreakfastPrice,Path=IsChecked}" >
-                    Quantity?</TextBox>
+                         IsEnabled="{Binding ElementName=BreakfastPrice,Path=IsChecked}"
+                         Text="{Binding Path=Breakfast}">
+                    </TextBox>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1">
                 <Image Margin="10" Source="/Images/lunch_new_png.png" Height="105" Width="156" />
                 <CheckBox x:Name="LunchPrice" Margin="10"
-                          Checked="CheckBoxChecked" Unchecked="CheckBoxChecked">Lunch  ($15)</CheckBox>
+                          Checked="CheckBoxChecked" Unchecked="CheckBoxChecked" IsChecked="{Binding Path=Lunch}">Lunch  ($15)</CheckBox>
                 <Label Name="LunchLabel" Visibility="Hidden" Foreground="red"
                        FontWeight="Bold" Margin="10,0,0,0"
                        >
@@ -63,13 +67,14 @@
                 <TextBox Padding="10,0,0,0" FontSize="18"
                          Margin="10" Name="LunchQuantity"
                          GotFocus="FocusEvent" LostFocus="LostFocusEvent"
-                         IsEnabled="{Binding ElementName=LunchPrice,Path=IsChecked}">
-                    Quantity?</TextBox>
+                         Text="{Binding Path=Lunch}"
+                         IsEnabled="{Binding ElementName=LunchPrice,Path=IsChecked}"></TextBox>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="0">
                 <Image Margin="10"  Height="105" Width="156"  Source="/Images/Dinner_new_png.png" />
                 <CheckBox Name="DinnerPrice" 
-                          Checked="CheckBoxChecked" Margin="10" Unchecked="CheckBoxChecked">Dinner  ($15)</CheckBox>
+                          Checked="CheckBoxChecked" Margin="10" Unchecked="CheckBoxChecked"
+                          IsChecked="{Binding Path= Dinner}">Dinner  ($15)</CheckBox>
                 <Label Name="DinnerLabel" Visibility="Hidden" Foreground="red"
                        FontWeight="Bold" Margin="10,0,0,0"
                        >
@@ -78,19 +83,22 @@
                 <TextBox x:Name="DinnerQuantity" Padding="10,0,0,0" 
                          FontSize="18" Margin="10" IsEnabled="{Binding ElementName=DinnerPrice,Path=IsChecked}"
                          GotFocus="FocusEvent" LostFocus="LostFocusEvent"
-                         >Quantity?</TextBox>
+                         Text="{Binding Path=Dinner}"></TextBox>
             </StackPanel>
         </Grid>
         <StackPanel Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" Background="#e7e7e7">
             <TextBlock Margin="10" FontSize="20">Special Needs</TextBlock>
             <CheckBox Margin="10" Content="Cleaning"
-                      FontSize="18" Name="Cleaning">
+                      FontSize="18" Name="Cleaning"
+                      IsChecked="{Binding Path=Cleaning}">
             </CheckBox>
             <CheckBox Margin="10" Content="Towels" 
-                      FontSize="18" Name="Towels">
+                      FontSize="18" Name="Towels"
+                      IsChecked="{Binding Path=Towel}">
             </CheckBox>
             <CheckBox Margin="10" Content="Sweetest Surprise" 
-                      FontSize="18" Name="Surprise">
+                      FontSize="18" Name="Surprise"
+                      IsChecked="{Binding Path=SSurprise}">
             </CheckBox>
             <Canvas>
                 <Button Canvas.Bottom="-310" Canvas.Left="20"

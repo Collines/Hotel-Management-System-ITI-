@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotelManagementSystem"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -11,6 +12,18 @@
         Title="Front End" Height="671" Width="1331"
         Icon="/Images/hotel.ico"
         >
+    <!--<Window.Resources>
+        <local:IntConverter x:Key="intConverter"></local:IntConverter>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetEnumValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:Gender"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>-->
+    <Window.DataContext>
+        <local:Reservation></local:Reservation>
+    </Window.DataContext>
     <Border BorderBrush="#00b159" BorderThickness="0,5,0,0">
         <Grid>
             <Grid.RowDefinitions>
@@ -39,7 +52,7 @@
             <Grid Grid.Row="1">
                 <TabControl  x:Name="tabControl"  Margin="0,-20,0,0" >
                     <TabItem Header="Reservation" BorderBrush="blue" BorderThickness="10">
-                        <Grid Background="#e7e7e7">
+                        <Grid x:Name="ReservationGrid" Background="#e7e7e7">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
@@ -50,15 +63,20 @@
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Name</Label>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox x:Name="FirstName" FontSize="20" Margin="17,0,7,0" Width="200"></TextBox>
-                                            <TextBox x:Name="LastName" FontSize="20" Width="200"></TextBox>
+                                            <TextBox x:Name="FirstName" FontSize="20" Margin="17,0,7,0" 
+                                                     Text="{Binding Path=Guest.FirstName}"  Width="200"></TextBox>
+                                            <TextBox x:Name="LastName" FontSize="20" Width="200"
+                                                      Text="{Binding Path=Guest.LastName}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Birthday</Label>
-                                        <StackPanel Orientation="Horizontal">
-                                            <ComboBox FontSize="20" Padding="10,3,3,3" SelectionChanged="MonthComboChange"
-                                                      Name="BirthMonth" Margin="17,0,3.5,0" Width="130">
+                                        <StackPanel Orientation="Vertical">
+                                            <DatePicker Margin="17,0,12,0" FontSize="18" Name="BirthDayPicker"
+                                                        SelectedDate="{Binding Path=Guest.Birthday}"></DatePicker>
+                                            <!--<ComboBox FontSize="20" Padding="10,3,3,3" SelectionChanged="MonthComboChange"
+                                                      Name="BirthMonth" Margin="17,0,3.5,0" Width="130"
+                                                      SelectedValue="{Binding Guest.Birthday}">
                                                 <ComboBoxItem Content="January" IsSelected="True"></ComboBoxItem>
                                                 <ComboBoxItem Content="February"></ComboBoxItem>
                                                 <ComboBoxItem Content="March"></ComboBoxItem>
@@ -76,55 +94,60 @@
                                                       Margin="3.5,0,7,0" Width="130">
                                             </ComboBox>
                                             <TextBox FontSize="20" Padding="5,3,3,3" Name="BirthYear"
-                                                     Width="130" Text="Year"></TextBox>
+                                                     Width="130" Text="Year"></TextBox>-->
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Gender</Label>
                                         <ComboBox FontSize="20" Padding="10,3,3,3"
-                                                  Margin="17,0,16,0" Name="Gender">
-                                            <ComboBoxItem IsSelected="True" Content="Male"></ComboBoxItem>
+                                                  Margin="17,0,16,0" Name="GenderCombo" SelectedIndex="{Binding Path=Guest.Gender}">
+                                            <ComboBoxItem Content="Male"></ComboBoxItem>
                                             <ComboBoxItem Content="Female"></ComboBoxItem>
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Phone Number</Label>
                                         <TextBox Name="PhoneNumber" FontSize="20"
-                                                 Margin="17,0,16,0"></TextBox>
+                                                 Text="{Binding Path=Guest.Phone}" Margin="17,0,16,0"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Email</Label>
-                                        <TextBox Name="Email" FontSize="20"
+                                        <TextBox Name="Email" FontSize="20" Text="{Binding Path=Guest.Email}"
                                                  Margin="17,0,16,0"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Address</Label>
-                                        <TextBox Name="StreetAddress" FontSize="20" Margin="17,0,16,0" Text=""></TextBox>
+                                        <TextBox Name="StreetAddress" FontSize="20" Margin="17,0,16,0" 
+                                                 Text="{Binding Path=Guest.StreetAddress}"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel Orientation="Vertical">
                                             <Label Margin="14,5,5,-3">Appartment</Label>
                                             <TextBox x:Name="Appartment" FontSize="20" 
-                                                 Margin="17,0,7,0" Width="200"></TextBox>
+                                                 Margin="17,0,7,0" Width="200"
+                                                     Text="{Binding Path=Guest.ApartmentSuite}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Vertical">
                                             <Label Margin="0,5,5,-3">Zone </Label>
                                             <TextBox x:Name="State" FontSize="20"
-                                                 Margin="0,0,7,0" Width="195"></TextBox>
+                                                 Margin="0,0,7,0" Width="195"
+                                                     Text="{Binding Path=Guest.State}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
                                             <Label Margin="17,5,5,-3">City</Label>
                                             <ComboBox  FontSize="20" Margin="17,0,7,0"
-                                                   Name="City" Width="200">
+                                                   Name="City" Width="200"
+                                                       SelectedItem="{Binding Guest.City}">
                                             </ComboBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Vertical">
                                             <Label Margin="0,5,5,-3">Zip Code</Label>
 
                                             <TextBox FontSize="20" Margin="0,0,7,0" 
-                                                 Name="Zipcode" Padding="2" Width="195"></TextBox>
+                                                 Name="Zipcode" Padding="2" Width="195"
+                                                     Text="{Binding Path=Guest.ZipCode}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
@@ -138,13 +161,27 @@
                                                 <Label Margin="14,5,5,-3">Number Of Guests</Label>
                                                 <ComboBox FontSize="20" Margin="17,0,7,0"
                                                       Name="NoOfGuests" Width="200"
-                                                      SelectionChanged="RoomPriceEvent">
+                                                          SelectedIndex="{Binding Path=NumberOfGuests}"
+                                                          SelectionChanged="UpdateRoomPriceEvent">
+                                                    <ComboBoxItem IsSelected="true">Number of Guest</ComboBoxItem>
+                                                    <ComboBoxItem>1</ComboBoxItem>
+                                                    <ComboBoxItem>2</ComboBoxItem>
+                                                    <ComboBoxItem>3</ComboBoxItem>
+                                                    <ComboBoxItem>4</ComboBoxItem>
+                                                    <ComboBoxItem>5</ComboBoxItem>
+                                                    <ComboBoxItem>6</ComboBoxItem>
+                                                    <ComboBoxItem>7</ComboBoxItem>
+                                                    <ComboBoxItem>8</ComboBoxItem>
+                                                    <ComboBoxItem>9</ComboBoxItem>
+                                                    <ComboBoxItem>10</ComboBoxItem>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Vertical">
                                                 <Label Margin="0,5,5,-3">Room Type</Label>
                                                 <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
-                                                      Name="RoomTypeCombo" SelectionChanged="FloorRoomTypeChange">
+                                                      Name="RoomTypeCombo"
+                                                          SelectedIndex="{Binding Path=Room.RoomType}"
+                                                          >
                                                     <ComboBoxItem IsSelected="true">Single</ComboBoxItem>
                                                     <ComboBoxItem>Double</ComboBoxItem>
                                                     <ComboBoxItem>Duplex</ComboBoxItem>
@@ -160,51 +197,71 @@
                                                 <Label Margin="14,5,5,-3">Floor</Label>
                                                 <ComboBox FontSize="20" Margin="17,3,7,0" 
                                                       Name="Floor" Width="200" 
-                                                       SelectionChanged="FloorRoomTypeChange">
+                                                       
+                                                          SelectedIndex="{Binding Path=Room.RoomFloor}">
+                                                    <ComboBoxItem IsSelected="true">Floor Number</ComboBoxItem>
+                                                    <ComboBoxItem>1</ComboBoxItem>
+                                                    <ComboBoxItem>2</ComboBoxItem>
+                                                    <ComboBoxItem>3</ComboBoxItem>
+                                                    <ComboBoxItem>4</ComboBoxItem>
+                                                    <ComboBoxItem>5</ComboBoxItem>
+                                                    <ComboBoxItem>6</ComboBoxItem>
+                                                    <ComboBoxItem>7</ComboBoxItem>
+                                                    <ComboBoxItem>8</ComboBoxItem>
+                                                    <ComboBoxItem>9</ComboBoxItem>
+                                                    <ComboBoxItem>10</ComboBoxItem>
+                                                    <ComboBoxItem>11</ComboBoxItem>
+                                                    <ComboBoxItem>12</ComboBoxItem>
+                                                    <ComboBoxItem>13</ComboBoxItem>
+                                                    <ComboBoxItem>14</ComboBoxItem>
+                                                    <ComboBoxItem>15</ComboBoxItem>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Vertical">
                                                 <Label Margin="-1,5,0,0">Room Number</Label>
                                                 <ComboBox FontSize="20" Margin="0,0,7,0" Width="200"
-                                                      Name="RoomNumber" SelectionChanged="RoomPriceEvent">
-                                                </ComboBox>
+                                                      Name="RoomNumber" MouseEnter="RoomNumberMouseEnter"
+                                                          SelectionChanged="ChooseRoom"
+                                                      />
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Entry Date</Label>
                                         <DatePicker VerticalAlignment="Center" FontSize="18" 
-                                                    Name="EntryDate" Margin="14,0,12,0" SelectedDateChanged="RoomPriceEvent" />
+                                                    Name="EntryDate" Margin="14,0,12,0"
+                                                    SelectedDate="{Binding Path=ArrivalTime}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label Margin="14,5,5,-3">Departure Date</Label>
                                         <DatePicker VerticalAlignment="Center" FontSize="18"
                                                     Name="DepartureDate" Margin="14,0,12,0"
-                                                    SelectedDateChanged="RoomPriceEvent"
-                                                     />
+                                                    
+                                                    SelectedDate="{Binding Path=LeavingTime}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Button FontSize="18" Padding="0,8,0,8" Click="FoodMenuClick"
                                                 Margin="14,20,12,0" Name="FoodAndMenuButton">Food and Menu</Button>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <CheckBox Margin="30" x:Name="CheckIn" Content="Check in?" />
-                                        <CheckBox Margin="30" x:Name="SendSMS" Content="Send SMS"/>
-                                        <CheckBox  Margin="30" x:Name="FoodSupply" Content="Food/Supply Status?"/>
+                                        <CheckBox Margin="30" x:Name="CheckIn" Content="Check in?" IsChecked="{Binding Path=CheckedIn}"/>
+                                        <!--<CheckBox Margin="30" x:Name="SendSMS" Content="Send SMS" />-->
+                                        <CheckBox  Margin="30" x:Name="FoodSupply"
+                                                   IsChecked="{Binding Path=SSurprise}" Content="Food/Supply Status?"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Button FontSize="18" Padding="0,8,0,8"
-                                                Click="FinlizeBillClick" Margin="14,0,12,0">Finalize Bill</Button>
+                                                Click="FinalizeBillClick" Margin="14,0,12,0">Finalize Bill</Button>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
                             <Border Grid.Column="2" BorderBrush="White" BorderThickness="3">
                                 <StackPanel>
 
-                                    <StackPanel>
+                                    <StackPanel Name="ReservationToEditCombo" Visibility="Hidden">
                                         <Label Margin="10,5,0,0">Select Reservation to Edit</Label>
                                         <ComboBox Background="White" Margin="12,2,12,12" 
-                                                  Name="SelectReservation" Padding="10"/>
+                                                  Name="SelectReservation" Padding="10" SelectionChanged="SelectedReservationToEdit"/>
                                     </StackPanel>
                                    
                                     <Canvas>
@@ -213,15 +270,15 @@
                                             <Button  BorderBrush="#a8a8a8" FontWeight="Bold" BorderThickness="1"
                                                 Background="#eeeeee" Visibility="Hidden"
                                                 Foreground="#00b159" Margin="10,20,10,0" Padding="0,8,0,8" FontSize="16" 
-                                                x:Name="Update" Content="Update"/>
+                                                x:Name="Update" Content="Update" Click="UpdateRecordClick"/>
                                             <Button  FontWeight="Bold" BorderThickness="1"
                                                 Background="black" BorderBrush="Red" Visibility="Hidden"
                                                 Foreground="Red" Margin="10,20,10,0" Padding="0,8,0,8"
-                                                x:Name="Delete" FontSize="16" Content="Delete"/>
+                                                x:Name="Delete" FontSize="16" Content="Delete" Click="DeleteReservation"/>
                                             <Button  BorderBrush="#a8a8a8" FontWeight="Bold" BorderThickness="1"
                                                 Background="#eeeeee" 
                                                 Foreground="#00b159" Margin="10,20,10,0" Padding="0,8,0,8" FontSize="16" 
-                                                Content="Edit existing Reservation"/>
+                                                Content="Edit existing Reservation" Name="EditReservation" Click="EditReservationClick"/>
                                             <Button BorderBrush="#a8a8a8" FontWeight="Bold" BorderThickness="1"
                                                 Background="#eeeeee"
                                                 Foreground="#00b159" Margin="10,20,10,0"  Padding="0,8,0,8" FontSize="16" 
@@ -234,18 +291,25 @@
                     </TabItem>
                     <TabItem Header="Universal Search" Padding="5">
                         <Grid Background="#e7e7e7">
+                            <StackPanel HorizontalAlignment="Center" Visibility="Hidden" Name="noresult">
+                                <TextBlock Margin="20" FontSize="25" Foreground="Red">No resuts found</TextBlock>
+                            </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Width="1100" Height="40" Margin="40,0,0,0" Padding="5"
-                                         FontSize="20" Text="Search"/>
-                                <Button Background="white" Height="40" Width="60">
+                                         FontSize="20" Text="Search" Name="SearchTextBox"/>
+                                <Button x:Name="SearchButton" Background="white" Height="40" Width="60"
+                                        Click="SearchButtonClick">
                                     <Image Source="/Images/ic_action_search (3).png" />
                                 </Button>
+                            </StackPanel>
+                            <StackPanel>
+                                <DataGrid x:Name="SearchGrid" Visibility="Hidden" IsReadOnly="true"></DataGrid>
                             </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Reservation Advertisement View" Padding="5">
                         <Grid Background="#e7e7e7">
-                            <DataGrid x:Name="ResGrid">
+                            <DataGrid x:Name="AllReservationDataGrid">
                                 
                             </DataGrid> 
                         </Grid>
@@ -260,8 +324,8 @@
                                           HorizontalScrollBarVisibility="Auto"
                                           Margin="0,0,5,0">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock FontSize="18" Padding="5">Occupied</TextBlock>
-                                    <DataGrid x:Name="OccupiedGrid">
+                                    <TextBlock FontSize="18" Padding="5">Free</TextBlock>
+                                    <DataGrid x:Name="Free" IsReadOnly="true">
                                         
                                     </DataGrid>
                                 </StackPanel>
@@ -271,7 +335,7 @@
                                           Margin="0,0,5,0">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontSize="18" Padding="5">Reserved</TextBlock>
-                                    <DataGrid x:Name="ReservedGrid">
+                                    <DataGrid x:Name="ReservedGrid" IsReadOnly="true">
 
                                     </DataGrid>
                                 </StackPanel>

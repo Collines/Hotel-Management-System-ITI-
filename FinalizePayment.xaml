@@ -10,6 +10,9 @@
         BorderThickness="0,5,0,0"
         MouseLeftButtonDown="MoveWindow"
         Title="Payment" Height="350" Width="579" IsVisibleChanged="VisibleHand">
+    <Window.DataContext>
+        <local:Payment></local:Payment>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -42,7 +45,7 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right"
                     Grid.Row="1" Grid.Column="1">
             <TextBlock FontSize="16" Margin="0,0,4,0">$</TextBlock>
-            <TextBlock FontSize="16" Name="CurrentBill" Padding="0,0,30,0">0</TextBlock>
+            <TextBlock FontSize="16" Name="CurrentBillTxtBlock" Text="{Binding Path}" Padding="0,0,30,0">0</TextBlock>
         </StackPanel>
         <!-- Separator -->
         <StackPanel VerticalAlignment="Center" Grid.Row="2"
@@ -52,21 +55,23 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right"
                     Grid.Row="2" Grid.Column="1">
             <TextBlock FontSize="16" Margin="0,0,4,0">$</TextBlock>
-            <TextBlock FontSize="16" Name="FoodBill" Padding="0,0,30,0">0</TextBlock>
+            <TextBlock FontSize="16" Name="FoodBillTxtBlock" Padding="0,0,30,0"
+                       Text="{Binding Path=Foodbill}">0</TextBlock>
         </StackPanel>
         <!-- Separator -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="center"
                     Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock FontSize="16" FontWeight="Bold" Margin="0,0,30,0">Tax</TextBlock>
             <TextBlock FontSize="16" Margin="0,0,4,0">$</TextBlock>
-            <TextBlock FontSize="16" Name="Tax" Padding="0,0,30,0">0</TextBlock>
+            <TextBlock FontSize="16" Name="Tax" Padding="0,0,30,0"
+                       Text="{Binding Path=Tax}">0</TextBlock>
         </StackPanel>
         <!-- Separator -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="center"
                     Grid.Row="4" Grid.ColumnSpan="2">
             <TextBlock FontSize="16" FontWeight="Bold" Margin="0,0,30,0">Total</TextBlock>
             <TextBlock FontSize="16" Margin="0,0,4,0">$</TextBlock>
-            <TextBlock FontSize="16" Name="Total" Padding="0,0,30,0">0</TextBlock>
+            <TextBlock FontSize="16" Name="Total" Text="{Binding Path=TotalBill}" Padding="0,0,30,0">0</TextBlock>
         </StackPanel>
         <!-- Separator -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
@@ -78,7 +83,10 @@
                     <ComboBox  FontSize="16" 
                                Width="150"
                               Name="PaymentTypeCombo"
+                               SelectedIndex="{Binding PaymentType}"
                               >
+                        <ComboBoxItem>Credit</ComboBoxItem>
+                        <ComboBoxItem>Debit</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
             </Border>
@@ -87,7 +95,8 @@
                     <Label FontSize="16">Card Number</Label>
                     <TextBox FontSize="16" Padding="1"
                              Width="300" KeyUp="CheckType"
-                             Name="CardNumber" KeyDown="CheckType">
+                             Name="CardNumber" KeyDown="CheckType"
+                             Text="{Binding Path=CardNumber}">
                     </TextBox>
                 </StackPanel>
             </Border>
@@ -96,14 +105,14 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Grid.Row="6" Grid.ColumnSpan="2">
-            <ComboBox Name="MonthCombo" IsEditable="True"
-                       FontSize="16" Text="MM"></ComboBox>
+            <ComboBox Name="MonthCombo" 
+                       FontSize="16" SelectedIndex="{Binding Path=ExpireMonth}"></ComboBox>
             <TextBlock VerticalAlignment="Center" Margin="5,0,5,0" 
                        FontSize="16">/</TextBlock>
-            <ComboBox Name="YearCombo" IsEditable="True"
-                       FontSize="16" Text="YY"></ComboBox>
-            <TextBox FontSize="16" Margin="10,0,0,0" Name="CVCTXT"
-                     Padding="3">CVC</TextBox>
+            <ComboBox Name="YearCombo"
+                       FontSize="16"  SelectedIndex="{Binding Path=ExpireYear}"></ComboBox>
+            <TextBox FontSize="16" Margin="10,0,0,0" Name="CVCTXT" Width="50"
+                     Padding="3" Text="{Binding Path=CardCVC}"></TextBox>
             <TextBlock Margin="25,0,15,0" FontSize="16">Card Type:</TextBlock>
             <TextBlock x:Name="CardTypeTxt" FontSize="16">Unknown</TextBlock>
         </StackPanel>

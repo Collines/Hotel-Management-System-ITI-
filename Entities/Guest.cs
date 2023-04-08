@@ -6,12 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManagementSystem.Entities
+namespace HotelManagementSystem
 {
     
-    public class Guest
+    public partial class Guest
     {
-
         public int GuestID { get; set; }
         [MaxLength(40)]
         public string FirstName { get; set; }
@@ -21,7 +20,7 @@ namespace HotelManagementSystem.Entities
 
         public DateTime Birthday { get; set; }
 
-        public Gender Gender { get; set; }
+        public int Gender { get; set; }
 
         [MaxLength(20)]
         public string Phone { get; set; }
@@ -34,8 +33,6 @@ namespace HotelManagementSystem.Entities
 
         public int ApartmentSuite { get; set; }
 
-        [MaxLength(20)]
-        public virtual City City { get; set; }
 
         [MaxLength(20)]
         public string State { get; set; }
@@ -43,6 +40,10 @@ namespace HotelManagementSystem.Entities
         [MaxLength(10)]
         public string ZipCode { get; set; }
 
+        [MaxLength(20)]
+        public virtual City City { get; set; }
+
+        public virtual Payment Payment { get; set; }
     }
 
 }

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace HotelManagementSystem
 {
-    public class City
+    public partial class Guest
     {
-        public int CityID { get; set; }
-        public string Name { get; set; }
-
+        public override string ToString()
+        {
+            return $"{FirstName} {LastName}";
+        }
     }
 }

@@ -6,16 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HotelManagementSystem.Entities
+namespace HotelManagementSystem
 {
-    public class Payment
+    public partial class Payment
     {
         public int PaymentID { get; set; }
 
+
         [Column(TypeName = "Money")]
-        public double TotalBill { get; set; }
-        public PaymentType PaymentType { get; set; }
-        public CardType CardType { get; set; }
+        public double Foodbill { get; set; }
+
+        [Column(TypeName = "Money")]
+        public double CurrentBill { get; set; }
+
+        [Column(TypeName = "Money")]
+        public double Tax { get; set; }
+
+        public int PaymentType { get; set; }
+        public int CardType { get; set; }
 
         [MaxLength(16)]
         public string CardNumber { get; set; }
@@ -24,9 +32,5 @@ namespace HotelManagementSystem.Entities
 
         [MaxLength(3)]
         public string CardCVC { get; set; }
-
-        public virtual Guest Guest { get; set; }
-
-
     }
 }

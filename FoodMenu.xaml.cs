@@ -23,11 +23,13 @@ namespace HotelManagementSystem
         FrontEnd CallerWindow;
         public static decimal FoodPrice = 0;
         public static decimal ServicesPrice = 0;
-        public FoodMenu(FrontEnd? caller = null)
+        public FoodMenu(FrontEnd? caller)
         {
             InitializeComponent();
             if(caller != null) 
                 CallerWindow = caller;
+            DataContext = caller.DataContext;
+            Closed += (sender, e) => caller.menu = null;
         }
 
         private void NextBtnClick(object sender, RoutedEventArgs e)
@@ -51,23 +53,28 @@ namespace HotelManagementSystem
             }
             if (Towels.IsChecked == true)
             {
-                ServicesPrice += 20;
+                ServicesPrice += 10;
                 CallerWindow.Towels = true;
             }
             if (Surprise.IsChecked == true)
             {
-                ServicesPrice += 30;
+                ServicesPrice += 10;
                 CallerWindow.SweetestSurprise = true;
             }
             if(Cleaning.IsChecked == true)
             {
-                ServicesPrice += 30;
+                ServicesPrice += 10;
                 CallerWindow.Cleaning = true;
             }
-            CallerWindow.FoodPrice = FoodPrice;
-            CallerWindow.ServicesPrice = ServicesPrice;
+            //CallerWindow.FoodPrice = FoodPrice;
+            //CallerWindow.ServicesPrice = ServicesPrice;
+            CallerWindow.Payment.Foodbill = (double)(FoodPrice + ServicesPrice);
             Visibility = Visibility.Hidden;
         }
+
+
+
+
 
         private void FocusEvent(object sender, RoutedEventArgs e)
         {

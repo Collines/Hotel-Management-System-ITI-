@@ -3,12 +3,12 @@ namespace HotelManagementSystem
 {
     public enum Gender : byte
     {
-        Male=1,
+        Male,
         Female
     }
-    public enum RoomType : byte
+    public enum RoomType
     {
-        Single=1,
+        Single,
         Double,
         Duplex,
         Suite
@@ -16,13 +16,13 @@ namespace HotelManagementSystem
 
     public enum PaymentType : byte
     {
-        Credit=1,
+        Credit,
         Debit
     }
 
-    public enum CardType : byte
+    public enum CardType
     {
-        Unknown = 0,
+        Unknown = -1,
         Visa,
         Mastercard,
         Discover
@@ -30,7 +30,7 @@ namespace HotelManagementSystem
 
     public enum Months : byte
     {
-        January=1,
+        January,
         February,
         March,
         April,

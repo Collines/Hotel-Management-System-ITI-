@@ -1,16 +1,18 @@
 ﻿using HotelManagementSystem.Context;
-using HotelManagementSystem.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,23 +22,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WPFCustomMessageBox;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HotelManagementSystem
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-
-    class Employee
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
     public partial class FrontEnd : Window
     {
-        FoodMenu menu;
-        FinalizePayment FP;
+        public FoodMenu menu;
+        public FinalizePayment FP;
         FrontendDB DB = new FrontendDB();
         //
         public decimal FoodPrice { get; set; } = 0;
@@ -48,115 +44,54 @@ namespace HotelManagementSystem
         public bool Cleaning { get; set; } = false;
         public bool Towels { get; set; } = false;
         public bool SweetestSurprise { get; set; } = false;
-        public Payment payment { get; set; }
+        public Payment Payment { get; set; } = new();
+        
+        public Reservation SelectedReservation { get; set; }
 
         public FrontEnd()
         {
             InitializeComponent();
-            InitializeComboBox();
-            InitializeAll();
+            InitializeCities();
             Closed += delegate (object? sender, EventArgs e)
             {
                 DB.Dispose();
                 FP?.Close();
                 menu?.Close();
             };
+            LoadReservationAdvertisementGridData();
+            LoadRoomAvailability();
         }
 
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
+        private void RoomNumberMouseEnter(object sender, MouseEventArgs e)
         {
-            Close();
-        }
-
-        private void MoveWindow(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        private void InitializeAll()
-        {
-            InitializeComboBox();
-            City.ItemsSource = DB.Cities.ToList();
-            City.DisplayMemberPath = "Name";
-            City.SelectedValuePath = "CityID";
-            FillComboWithNumbers(NoOfGuests, 1, 10);
-            FillComboWithNumbers(Floor, 1, 15);
-            ComboBoxItem selectedFloor = (ComboBoxItem)Floor.SelectedValue;
-            ComboBoxItem selectedRoomType = (ComboBoxItem)RoomTypeCombo.SelectedValue;
-            RoomType RT = Enum.Parse<RoomType>((string)selectedRoomType.Content);
-            RoomNumber.ItemsSource = DB.Rooms.Where(R => R.RoomFloor == (int)selectedFloor.Content
-                                                                    && (R.RoomType == RT)).ToList();
-            RoomNumber.DisplayMemberPath = "RoomNumber";
-            RoomNumber.SelectedValuePath = "RoomID";
-            SelectReservation.ItemsSource = DB.Reservations.Include("Guest").Select(R => new
+            if (SelectedReservation != null)
             {
-                DisplayedData = $"{R.ReservationID} | {R.Guest.FirstName} {R.Guest.LastName}",
-                ReservationID = R.ReservationID
-            }).ToList();
-            SelectReservation.SelectedValuePath = "ReservationID";
-            SelectReservation.DisplayMemberPath = "DisplayedData";
-        }
-
-        private void InitializeComboBox()
-        {
-            int Days = 0;
-            ComboBoxItem selectedItem = (ComboBoxItem)BirthMonth?.SelectedItem;
-            if (Enum.TryParse<Months>(selectedItem?.Content?.ToString(), out Months M))
-            {
-                switch (M)
+                var Rooms = DB.Rooms./*AsNoTracking().*/IgnoreQueryFilters().Where(R => R.RoomFloor == SelectedReservation.Room.RoomFloor
+                                                                    && (R.RoomType == SelectedReservation.Room.RoomType)).ToList();
+                if (Rooms != null)
                 {
-                    case Months.January:
-                        Days = 30;
-                        break;
-                    case Months.February:
-                        Days = 29;
-                        break;
-                    case Months.March:
-                        Days = 31;
-                        break;
-                    case Months.April:
-                        Days = 30;
-                        break;
-                    case Months.May:
-                        Days = 31;
-                        break;
-                    case Months.June:
-                        Days = 30;
-                        break;
-                    case Months.July:
-                        Days = 31;
-                        break;
-                    case Months.August:
-                        Days = 31;
-                        break;
-                    case Months.September:
-                        Days = 30;
-                        break;
-                    case Months.October:
-                        Days = 31;
-                        break;
-                    case Months.November:
-                        Days = 30;
-                        break;
-                    case Months.December:
-                        Days = 31;
-                        break;
-                    default:
-                        Days = 30;
-                        break;
+                    RoomNumber.ItemsSource = null;
+                    RoomNumber.Items.Clear();
+                    RoomNumber.ItemsSource = Rooms;
+                    RoomNumber.DisplayMemberPath = "RoomNumber";
+                    RoomNumber.SelectedValuePath = "RoomID";
+                    RoomNumber.SelectedItem = Rooms.Find(R => R.RoomID == SelectedReservation.Room.RoomID);
                 }
-
+                return;
             }
-            if (Days > 0)
+            int? selectedRoomType = RoomTypeCombo?.SelectedIndex;
+            if (selectedRoomType != null && Floor != null && Floor.SelectedIndex > 0)
             {
-                BirthDayCombo?.Items.Clear();
-                FillComboWithNumbers(BirthDayCombo, 1, Days);
+                var Rooms = DB.Rooms./*AsNoTracking().*/Where(R => R.RoomFloor == Floor.SelectedIndex
+                                                                    && (R.RoomType == selectedRoomType)).ToList();
+                if (Rooms != null)
+                {
+                    RoomNumber.ItemsSource = Rooms;
+                    RoomNumber.DisplayMemberPath = "RoomNumber";
+                    RoomNumber.SelectedValuePath = "RoomID";
+                }
             }
-        }
-
-        private void MonthComboChange(object sender, SelectionChangedEventArgs e)
-        {
-            InitializeComboBox();
+            
         }
 
         private void FoodMenuClick(object sender, RoutedEventArgs e)
@@ -170,37 +105,274 @@ namespace HotelManagementSystem
             }
         }
 
-        private void FinlizeBillClick(object sender, RoutedEventArgs e)
+        private void FinalizeBillClick(object sender, RoutedEventArgs e)
         {
+            UpdateRoomPrice();
             if (FP != null)
             {
                 FP.ShowDialog();
+                //if (SelectedReservation != null)
+                    //FP.DataContext = SelectedReservation?.Guest?.Payment;
+                    FP.DataContext = Payment;
+                //else
+                    //FP.DataContext = Payment;
                 FP.UpdatePaymentFields();
             }
 
             else
             {
                 FP = new(this);
+                if (SelectedReservation != null)
+                    FP.DataContext = SelectedReservation?.Guest?.Payment;
+                else
+                    FP.DataContext = Payment;
                 FP.ShowDialog();
-
             }
         }
 
         private void NewReservationClick(object sender, RoutedEventArgs e)
         {
-
-
             Guest newGuest;
-            List<string> Errors = new List<string>();
+            if (!ValidateData(out List<string> Errors))
+            {
+                CustomMessageBox.Show(string.Join("\n", Errors.ToArray()), "Enter Missing Fields", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else
+            {
+                UpdateRoomPrice();
+                if((double)RoomPrice != Payment.CurrentBill)
+                {
+                    FinalizeBillClick(sender, e);
+                    return;
+                }
+                ComboBoxItem CBItm;
+                int cityID = (int)City.SelectedValue;
+                CBItm = (ComboBoxItem)GenderCombo.SelectedValue;
+                Gender gender = Enum.Parse<Gender>((string)CBItm.Content);
 
-            // Gather Guest data with validation
+                #pragma warning disable CS8602 // Dereference of a possibly null reference.
+                DB.Rooms.FirstOrDefault(R=> R.RoomID== (int)RoomNumber.SelectedValue).IsReserved = true;
+                #pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+                newGuest = new Guest()
+                {
+                    FirstName = FirstName.Text,
+                    LastName = LastName.Text,
+                    Birthday = Convert.ToDateTime(BirthDayPicker.Text),
+                    Gender = (int)gender,//(Gender)Gender.SelectedValue,
+                    Phone = PhoneNumber.Text,
+                    Email = Email.Text,
+                    StreetAddress = StreetAddress.Text,
+                    ApartmentSuite = int.Parse(Appartment.Text),
+                    State = State.Text,
+                    City = DB.Cities.FirstOrDefault(c => c.CityID == cityID),
+                    ZipCode = Zipcode.Text,
+                    Payment = Payment
+                };
+                Reservation reservation = new Reservation()
+                {
+                    NumberOfGuests = NoOfGuests.SelectedIndex,
+                    Guest = newGuest,
+                    Room = DB.Rooms.FirstOrDefault(R => R.RoomID == (int)RoomNumber.SelectedValue),
+                    ArrivalTime = Convert.ToDateTime(EntryDate.Text),
+                    LeavingTime = Convert.ToDateTime(DepartureDate.Text),
+                    CheckedIn = (bool)CheckIn.IsChecked ? true : false,
+                    Breakfast = Breakfast,
+                    Lunch = Lunch,
+                    Dinner = Dinner,
+                    Cleaning = Cleaning,
+                    Towel = Towels,
+                    SSurprise = SweetestSurprise,
+                    SupplyStatus = (bool)FoodSupply.IsChecked ? true : false,
+                };
+
+                DB.Add(newGuest);
+                DB.Add(reservation);
+                DB.SaveChanges();
+                CustomMessageBox.Show("Reservation added Successfully!", "Success", MessageBoxButton.OK);
+                //FrontEnd window = new FrontEnd();
+                //Close();
+                //window.ShowDialog();
+            }
+            
+        }
+
+        public void UpdateRoomPrice()
+        {
+            RoomPrice = 0;
+            int SelectedRoomTypeIndex = RoomTypeCombo?.SelectedIndex??-1;
+            int GuestNum = NoOfGuests?.SelectedIndex != null ? NoOfGuests.SelectedIndex: 0;
+            RoomPrice += GuestNum * 15;
+            if(SelectedRoomTypeIndex >=0)
+            {
+                RoomPrice += (SelectedRoomTypeIndex + 1) * 40;
+            }
+            int floorNum = Floor?.SelectedIndex !=null? Floor.SelectedIndex :0;
+            RoomPrice += 5 * floorNum;
+
+
+           if(DepartureDate!=null && EntryDate!=null)
+            {
+                if (DepartureDate.Text.Length>0 && EntryDate.Text.Length>0)
+                {
+                    double No_of_Days = (Convert.ToDateTime(DepartureDate?.Text ??$"{DateTime.Now}") - Convert.ToDateTime(EntryDate?.Text?? $"{DateTime.Now}")).TotalDays;
+                    RoomPrice *= (int)No_of_Days;
+                }
+            }
+
+            Payment.CurrentBill = (double)RoomPrice;
+
+            if (FP != null)
+                FP.DataContext = SelectedReservation?.Guest?.Payment;
+        }
+
+        private void SelectedReservationToEdit(object sender, SelectionChangedEventArgs e)
+        {
+            #pragma warning disable CS8601 // Possible null reference assignment.
+            if(SelectReservation.SelectedValue!=null)
+            {
+                SelectedReservation = DB.Reservations.IgnoreQueryFilters()
+                .Include(R => R.Guest)
+                .Include(R => R.Guest.Payment)
+                .Include(R => R.Room)
+                .FirstOrDefault(R => R.ReservationID == (int)SelectReservation.SelectedValue);
+            }
+            #pragma warning restore CS8601 // Possible null reference assignment.
+
+            DataContext = SelectedReservation;
+            Payment = SelectedReservation.Guest.Payment;
+
+            if (menu != null)
+                menu.DataContext = DataContext;
+            if (FP != null)
+                FP.DataContext = Payment;
+
+            if(SelectReservation.SelectedValue!=null && SelectedReservation!=null)
+            {
+                Update.Visibility = Visibility.Visible;
+                Delete.Visibility = Visibility.Visible;
+            } else
+            {
+                Update.Visibility = Visibility.Hidden;
+                Delete.Visibility = Visibility.Hidden;
+            }
+            MouseEventArgs? t = null;
+            RoomNumberMouseEnter(sender,t);
+        }
+        public void ChooseRoom(object sender, RoutedEventArgs e)
+        {
+            if(SelectedReservation != null)
+            {
+                if (SelectedReservation.Room.Equals((Room)RoomNumber.SelectedItem))
+                    return;
+            
+                if(RoomNumber.SelectedItem != null && RoomNumber.SelectedItem is Room selectedRoom && SelectedReservation!=null)
+                {
+                    if (selectedRoom != SelectedReservation.Room && selectedRoom.IsReserved == true)
+                    {
+                        CustomMessageBox.Show("This room is already reserved by another guest", "Room already reserved", MessageBoxButton.OK, MessageBoxImage.Stop);
+                        RoomNumber.SelectedItem = SelectedReservation.Room;
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        private void UpdateRecordClick(object sender, RoutedEventArgs e)
+        {
+
+            if(ValidateData(out List<string> Errors))
+            {
+                if (RoomNumber.SelectedItem != null && RoomNumber.SelectedItem is Room selectedRoom)
+                {
+                    
+                    if (SelectedReservation.Room.Equals(selectedRoom))
+                    {
+                        DB.SaveChanges();
+                        CustomMessageBox.Show("Reservation Modified Successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        return;
+                    }
+                    if (SelectedReservation.Room != selectedRoom && !selectedRoom.IsReserved)
+                    {
+                        SelectedReservation.Room.IsReserved = false;
+                        selectedRoom.IsReserved = true;
+                        SelectedReservation.Room = selectedRoom;
+                        SelectedReservation.RoomID = selectedRoom.RoomID;
+                        ////DB.Entry(SelectedReservation.Room).State = EntityState.Unchanged;
+                        ////DB.Entry(selectedRoom).State = EntityState.Unchanged;
+                        //Debug.WriteLine(DB.Entry(SelectedReservation.Room).State);
+                        //Debug.WriteLine(DB.Entry(selectedRoom).State);
+                        DB.SaveChanges();
+                        CustomMessageBox.Show("Reservation Modified Successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        return;
+                    } else
+                    {
+                        CustomMessageBox.Show("Room already reserved!", "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        RoomNumber.SelectedItem = SelectedReservation.Room;
+                        return;
+                    }
+                }
+            } else
+            {
+                CustomMessageBox.Show(string.Join("\n", Errors.ToArray()), "Enter Missing Fields", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
+        }
+
+        private void DeleteReservation(object sender, RoutedEventArgs e)
+        {
+            if(SelectedReservation!=null)
+            {
+                MessageBoxResult R = MessageBox.Show("Are you sure you want to delete this reservation?", "Confirmation", MessageBoxButton.YesNo);
+                if (R == MessageBoxResult.Yes)
+                {
+                    DB.Remove(SelectedReservation);
+                    SelectedReservation.Room.IsReserved = false;
+                    DB.Remove(SelectedReservation.Guest);
+                    DB.Remove(SelectedReservation.Guest.Payment);
+                    DB.SaveChanges();
+                    CustomMessageBox.Show("Reservation Deleted Successfully!", "Success", MessageBoxButton.OK,MessageBoxImage.Exclamation);
+                    EditReservationClick(sender, e);
+                }
+            }
+            
+        }
+
+        private void EditReservationClick(object sender, RoutedEventArgs e)
+        {
+            ReservationToEditCombo.Visibility = Visibility.Visible;
+            if (ReservationToEditCombo != null)
+            {
+                var Reservations = DB.Reservations.Include("Guest").Select(R => new
+                {
+                    DisplayedData = $"{R.ReservationID} | {R.Guest.FirstName} {R.Guest.LastName} | {R.Guest.Payment.CardNumber}",
+                    ReservationID = R.ReservationID,
+                }).ToList();
+
+                if (Reservations != null)
+                {
+                    SelectReservation.ItemsSource = Reservations;
+                    SelectReservation.SelectedValuePath = "ReservationID";
+                    SelectReservation.DisplayMemberPath = "DisplayedData";
+                }
+
+            }
+        }
+
+
+        private bool ValidateData(out List<string> Errors)
+        {
+            Errors = new List<string>();
             if (FirstName.Text?.Length == 0)
                 Errors.Add("Enter Firstname");
             if (LastName.Text.Length == 0)
                 Errors.Add("Enter Lastname");
-            if (!int.TryParse(BirthYear.Text, out int year))
-                Errors.Add("Enter Birth Year");
-            if (PhoneNumber.Text?.Length == 0 || Regex.Matches(PhoneNumber.Text, "^([0-9]*)$").Count ==0)
+            if (!DateTime.TryParse(BirthDayPicker.Text, out DateTime date))
+                Errors.Add("Enter Valid Birthday");
+            if (PhoneNumber.Text?.Length == 0 || Regex.Matches(PhoneNumber.Text, "^([0-9]*)$").Count == 0)
                 Errors.Add("Enter a valid Phone number");
             if (Email.Text?.Length == 0 || Regex.Matches(Email.Text, "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$").Count == 0)
                 Errors.Add("Enter a valid Email address");
@@ -214,153 +386,92 @@ namespace HotelManagementSystem
                 Errors.Add("Enter your Zipcode");
             if (City.SelectedValue == null || (Int32)City.SelectedValue == 0)
                 Errors.Add("Enter your city");
-
-            if (Errors.Count > 0)
-            {
-                CustomMessageBox.Show(string.Join("\n", Errors.ToArray()), "Enter Missing Fields", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            else
-            {
-                ComboBoxItem CBItm = (ComboBoxItem)BirthMonth.SelectedValue;
-                Months Month = Enum.Parse<Months>((string)CBItm.Content);
-                int MonthID =(int)Month;
-                CBItm = (ComboBoxItem)BirthDayCombo.SelectedValue;
-                int bday = (int)CBItm.Content;
-                int cityID = (int)City.SelectedValue;
-                CBItm = (ComboBoxItem)Gender.SelectedValue;
-                newGuest = new Guest()
-                {
-                    FirstName = FirstName.Text,
-                    LastName = LastName.Text,
-                    Birthday = new DateTime(int.Parse(BirthYear.Text), MonthID, bday),
-                    Gender = Enum.Parse<Gender>((string)CBItm.Content),//(Gender)Gender.SelectedValue,
-                    Phone = PhoneNumber.Text,
-                    Email = Email.Text,
-                    StreetAddress = StreetAddress.Text,
-                    ApartmentSuite = int.Parse(Appartment.Text),
-                    State = State.Text,
-                    City = DB.Cities.FirstOrDefault(c => c.CityID == cityID),
-                    ZipCode = Zipcode.Text
-                };
-            }
-            //
+            if (NoOfGuests.SelectedIndex == 0)
+                Errors.Add("Enter a valid Number of guests");
+            if (Floor.SelectedIndex == 0)
+                Errors.Add("Enter a valid Floor");
             if (RoomNumber.SelectedValue == null || (Int32)RoomNumber.SelectedValue == 0)
                 Errors.Add("Please Pick a room");
             if (!DateTime.TryParse(EntryDate.Text, out DateTime r) || Convert.ToDateTime(EntryDate.Text) < DateTime.Now)
                 Errors.Add("Enter valid Entry date");
             if (!DateTime.TryParse(DepartureDate.Text, out DateTime d) || Convert.ToDateTime(DepartureDate.Text) <= Convert.ToDateTime(EntryDate.Text))
                 Errors.Add("Enter valid departure date (Date should be in future)");
-
-            if(Errors.Count > 0)
-            {
-                CustomMessageBox.Show(string.Join("\n", Errors.ToArray()), "Enter Missing Fields", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            } else
-            {
-                Reservation reservation = new Reservation()
-                {
-                    NumberOfGuests = NoOfGuests.SelectedIndex + 1,
-                    Guest = newGuest,
-                    Room = DB.Rooms.Find(RoomNumber.SelectedValue),
-                    ArrivalTime = Convert.ToDateTime(EntryDate.Text),
-                    LeavingTime = Convert.ToDateTime(DepartureDate.Text),
-                    CheckedIn = (bool)CheckIn.IsChecked ? true : false,
-                    Breakfast= Breakfast,
-                    Lunch= Lunch,
-                    Dinner = Dinner,
-                    Cleaning = Cleaning,
-                    Towel = Towels,
-                    SSurprise = SweetestSurprise,
-                    SupplyStatus = (bool)FoodSupply.IsChecked ? true : false,
-                };
-                DB.Rooms.Find(RoomNumber.SelectedValue).IsReserved = true;
-                Payment payment = new Payment()
-                {
-                    PaymentType = FP.PaymentType,
-                    CardNumber = FP.Cardnumber,
-                    CardType = FP.CardType,
-                    CardCVC = FP.CVC,
-                    ExpireMonth = FP.CardExpireMonth,
-                    ExpireYear = FP.CardExpireYear,
-                    Guest = newGuest,
-                    TotalBill = (double)FP.TotalBill
-                };
-
-                DB.Add(newGuest);
-                DB.Add(reservation);
-                DB.Add(payment);
-                DB.SaveChanges();
-                //DB.Add(reservation);
-                CustomMessageBox.Show("Reservation added Successfully!", "Success", MessageBoxButton.OK);
-
-            }
+            if (!Payment)
+                Errors.Add("You should Initialize Payment");
+            if (Errors.Count > 0)
+                return false;
+            return true;
         }
 
-        private void FillComboWithNumbers(ComboBox comboBox, int start, int end)
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = start; i <= end; i++)
-            {
-                ComboBoxItem item = new() { Content = i };
-                if (i == 1)
-                    item.IsSelected = true;
-
-                comboBox?.Items.Add(item);
-            }
+            Close();
         }
 
-        private void RoomPriceEvent(object sender, SelectionChangedEventArgs e)
+        private void MoveWindow(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+        private void InitializeCities()
+        {
+            City.ItemsSource = DB.Cities.ToList();
+            City.DisplayMemberPath = "Name";
+            City.SelectedValuePath = "CityID";
+        }
+
+        private void UpdateRoomPriceEvent(object sender, SelectionChangedEventArgs e)
         {
             UpdateRoomPrice();
         }
 
-        private void FloorRoomTypeChange(object sender, SelectionChangedEventArgs e)
+
+
+        /// SEARCH TAB CODE     ////////////////////
+        /// 
+
+        private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            ComboBoxItem selectedRoomType= (ComboBoxItem)RoomTypeCombo?.SelectedValue??new();
-            RoomType RT;
-            //if (selectedRoomType.Content != null)
-            string selectedRoomTypeString = selectedRoomType.Content != null ? (string)selectedRoomType.Content : "Single";
-            RT = Enum.Parse<RoomType>(selectedRoomTypeString);
+            var Reservations = DB.Reservations.IgnoreQueryFilters().Include(R => R.Guest).Include(R=>R.Room).Where(R => 
+            R.Guest.FirstName.Contains(SearchTextBox.Text) ||
+            R.Guest.LastName.Contains(SearchTextBox.Text) ||
+            R.Room.RoomNumber.Contains(SearchTextBox.Text)).ToList();
 
-            if(Floor!=null)
+            if (Reservations != null && Reservations.Count>0)
             {
-                if (Floor.SelectedValue is ComboBoxItem selectedFloor /*&& RoomTypeCombo.SelectedValue is ComboBoxItem selectedRoomType*/)
-                {
-
-                    RoomNumber.ItemsSource = DB.Rooms.Where(R => R.RoomFloor == (int)selectedFloor.Content
-                                                            && (R.RoomType == RT)).ToList();
-                }
+                SearchGrid.ItemsSource = Reservations;
+                SearchGrid.Visibility= Visibility.Visible;
+                noresult.Visibility = Visibility.Hidden;
             }
-            
-            RoomPriceEvent(sender, e);
+            else
+            {
+                SearchGrid.Visibility = Visibility.Hidden;
+                noresult.Visibility = Visibility.Visible;
+            }
         }
 
-        public void UpdateRoomPrice()
+
+        /// Reservation Advertisement TAB CODE     ////////////////////
+        /// 
+
+        private void LoadReservationAdvertisementGridData()
         {
-            RoomPrice = 0;
-            ComboBoxItem selectedRoomType = (ComboBoxItem)RoomTypeCombo.SelectedValue;
-            int GuestNum = NoOfGuests?.SelectedIndex != null ? NoOfGuests.SelectedIndex + 1 : 0;
-            RoomPrice += GuestNum * 15;
-            if(selectedRoomType != null && selectedRoomType.Content !=null)
-            {
-                RoomType RT = Enum.Parse<RoomType>((string)selectedRoomType.Content);
-                RoomPrice += (int)RT * 40;
-            }
-            int floorNum = Floor?.SelectedIndex !=null? Floor.SelectedIndex + 1:0;
-            RoomPrice += 5 * floorNum;
-
-
-           if(DepartureDate!=null && EntryDate!=null)
-            {
-                if (DepartureDate.Text.Length>0 && EntryDate.Text.Length>0)
-                {
-                    double No_of_Days = (Convert.ToDateTime(DepartureDate?.Text ??$"{DateTime.Now}") - Convert.ToDateTime(EntryDate?.Text?? $"{DateTime.Now}")).TotalDays;
-                    RoomPrice *= (int)No_of_Days;
-
-                }
-            }
-            Debug.WriteLine(RoomPrice);
+            AllReservationDataGrid.ItemsSource = DB.Reservations.IgnoreQueryFilters().Include(R => R.Room).Include(R => R.Guest).ToList();
         }
+
+
+        /// Room Availability TAB CODE     ////////////////////
+
+        private void LoadRoomAvailability()
+        {
+            DB.Rooms.IgnoreQueryFilters().Load();
+            var AvailableRooms = DB.Rooms.Local.Where(R => !R.IsReserved).ToList();
+            var UnavailableRooms = DB.Rooms.Local.Where(R => R.IsReserved).ToList();
+            ReservedGrid.ItemsSource = UnavailableRooms;
+            Free.ItemsSource = AvailableRooms;
+        }
+
+
+
 
     }
 
