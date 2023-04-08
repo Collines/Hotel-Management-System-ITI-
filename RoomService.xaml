@@ -11,6 +11,9 @@
         Title="Front End" Height="671" Width="1331"
         Icon="/Images/hotel.ico"
         >
+    <Window.DataContext>
+        <local:Reservation></local:Reservation>
+    </Window.DataContext>
     <Border BorderBrush="#00b159" BorderThickness="0,5,0,0">
         <Grid>
             <Grid.RowDefinitions>
@@ -50,29 +53,36 @@
                                     <StackPanel Orientation="Vertical">
                                         <Label FontSize="20" Margin="14,5,5,-3">Name</Label>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox FontSize="20" Margin="17,0,7,0" Width="200"></TextBox>
-                                            <TextBox FontSize="20" Width="200"></TextBox>
+                                            <TextBox FontSize="20" Margin="17,0,7,0"
+                                                     Name="FirstNameTextBox" Width="200"
+                                                     Text="{Binding Path=Guest.FirstName}"></TextBox>
+                                            <TextBox FontSize="20" Width="200"
+                                                     Text="{Binding Path=Guest.LastName}" Name="LastNameTextBox"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label FontSize="20" Margin="14,5,5,-3">Phone Number</Label>
-                                        <TextBox Name="PhoneTxt" FontSize="20" Margin="17,0,16,0"></TextBox>
+                                        <TextBox Name="PhoneTxtBox" FontSize="20" 
+                                                 Margin="17,0,16,0" Text="{Binding Path=Guest.Phone}"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel Orientation="Vertical">
                                             <Label  Margin="14,5,5,-17" FontSize="20">Room Type</Label>
                                             <TextBox x:Name="RoomType" FontSize="20" 
-                                                     Margin="14,15,0,0" Width="200">Room Type</TextBox>
+                                                     Margin="14,15,0,0" Width="200"
+                                                     Text="{Binding Path=Room.RoomType}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Vertical">
                                             <Label  Margin="8,5,5,-17" FontSize="20">Floor</Label>
                                             <TextBox x:Name="Floor" FontSize="20" 
-                                                     Margin="7,15,0,0" Width="200">Floor</TextBox>
+                                                     Margin="7,15,0,0" Width="200"
+                                                     Text="{Binding Path=Room.RoomFloor}"></TextBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <Label FontSize="20" Margin="14,5,5,-3">Room #</Label>
-                                        <TextBox Name="RoomNum" FontSize="20" Margin="17,0,16,0" Text="Room #"></TextBox>
+                                        <TextBox Name="RoomNum" FontSize="20" Margin="17,0,16,0" 
+                                                 Text="{Binding Path=Room.RoomNumber}"></TextBox>
                                     </StackPanel>
 
                                 </StackPanel>
@@ -85,21 +95,24 @@
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel>
                                                 <Label FontSize="18" Margin="10,5,5,-3">Breakfast [QTY]</Label>
-                                                <TextBox FontSize="20" Margin="14,0,0,0" Width="200" Text="Breakfast"></TextBox>
+                                                <TextBox FontSize="20" Margin="14,0,0,0" Width="200" 
+                                                         Text="{Binding Path=Breakfast}"></TextBox>
                                             </StackPanel>
                                             <StackPanel>
                                                 <Label FontSize="18" Margin="6,5,5,-3">Lunch [QTY]</Label>
-                                                <TextBox FontSize="20" Margin="10,0,7,0" Width="200" Text="Lunch"></TextBox>
+                                                <TextBox FontSize="20" Margin="10,0,7,0" Width="200" 
+                                                         Text="{Binding Path=Lunch}"></TextBox>
                                             </StackPanel>
                                         </StackPanel>
                                         <StackPanel>
                                             <Label FontSize="18" Margin="10,5,5,-3">Dinner [QTY]</Label>
-                                            <TextBox FontSize="20" Margin="14,0,7,0" Width="410" Text="Dinner"></TextBox>
+                                            <TextBox FontSize="20" Margin="14,0,7,0" Width="410"
+                                                     Text="{Binding Path=Dinner}"></TextBox>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <CheckBox IsEnabled="False" Margin="30" x:Name="CleaningChkBox" Content="Cleaning" />
-                                            <CheckBox IsEnabled="False" Margin="30" x:Name="TowelsChkBox" Content="Towels"/>
-                                            <CheckBox IsEnabled="False" Margin="30" x:Name="SweetestChkBox" Content="Sweetest Surprise"/>
+                                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=CheckedIn}" Margin="30" x:Name="CleaningChkBox" Content="Cleaning" />
+                                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=Towel}" Margin="30" x:Name="TowelsChkBox" Content="Towels"/>
+                                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=SSurprise}" Margin="30" x:Name="SweetestChkBox" Content="Sweetest Surprise"/>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Center">
                                             <CheckBox  Margin="30" x:Name="supplyStatus" Content="Food/Supply Status?" />
@@ -118,7 +131,7 @@
                                     Height="400" BorderThickness="3">
                                 <StackPanel>
                                     <ScrollViewer Height="278">
-                                        <ListBox BorderBrush="#7e7e7e" BorderThickness="2" x:Name="OnTheLine" Padding="10"/>
+                                        <ListBox BorderBrush="#7e7e7e" BorderThickness="2" x:Name="ListBoxReservations" Padding="10" SelectionChanged="SelectionChangedEvent"/>
                                     </ScrollViewer>
                                             <Button BorderBrush="#a8a8a8" FontWeight="Bold"
                                                     BorderThickness="2" Background="#eeeeee"

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -20,9 +21,26 @@ namespace HotelManagementSystem
     /// </summary>
     public partial class RoomService : Window
     {
+        FrontendDB DB = new FrontendDB();
+        Reservation SelectedReservation;
         public RoomService()
         {
             InitializeComponent();
+            Closed += (sender, e) => DB.Dispose();
+            //ListBoxReservations.ItemsSource = DB.Reservations.IgnoreQueryFilters().Include(R=>R.Guest).Include(R=>R.Room).ToList();
+            ListBoxReservations.ItemsSource = DB.Reservations.IgnoreQueryFilters().Include(R=>R.Guest).Include(R=>R.Room).Select(R=> new
+            {
+                DisplayedData = $"{R.ReservationID} | {R.Room.RoomNumber} | {R.Guest.FirstName} {R.Guest.LastName} | {R.Guest.Payment.CardNumber}",
+                ReservationID = R.ReservationID
+            }).ToList();
+            ListBoxReservations.DisplayMemberPath = "DisplayedData";
+            ListBoxReservations.SelectedValuePath = "ReservationID";
+        }
+
+        private void SelectionChangedEvent(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedReservation = DB.Reservations.IgnoreQueryFilters().Include(R=>R.Room).Include(R=>R.Guest).Include(R=>R.Guest.Payment).FirstOrDefault(R=>R.ReservationID==(int)ListBoxReservations.SelectedValue);
+            DataContext = SelectedReservation;
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
@@ -35,5 +53,6 @@ namespace HotelManagementSystem
             DragMove();
         }
 
+        
     }
 }
