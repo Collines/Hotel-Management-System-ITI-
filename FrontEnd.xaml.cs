@@ -431,7 +431,8 @@ namespace HotelManagementSystem
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            var Reservations = DB.Reservations.IgnoreQueryFilters().Include(R => R.Guest).Include(R=>R.Room).Where(R => 
+            var Reservations = DB.Reservations.IgnoreQueryFilters().Include(R => R.Guest).Include(R=>R.Room).Where(
+            R => 
             R.Guest.FirstName.Contains(SearchTextBox.Text) ||
             R.Guest.LastName.Contains(SearchTextBox.Text) ||
             R.Room.RoomNumber.Contains(SearchTextBox.Text)).ToList();
