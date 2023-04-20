@@ -36,7 +36,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.HasKey("CityID");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Guest", b =>
@@ -103,7 +103,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.HasIndex("PaymentID");
 
-                    b.ToTable("Guests");
+                    b.ToTable("Guests", (string)null);
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Payment", b =>
@@ -147,7 +147,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.HasKey("PaymentID");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Reservation", b =>
@@ -203,7 +203,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
 
                     b.HasIndex("RoomID");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Room", b =>
@@ -235,7 +235,7 @@ namespace HotelManagementSystem.Migrations.FrontendDBMigrations
                     b.HasIndex("RoomNumber")
                         .IsUnique();
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("HotelManagementSystem.Guest", b =>

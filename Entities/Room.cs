@@ -14,7 +14,7 @@ namespace HotelManagementSystem
         [MaxLength(6)]
         public string RoomNumber { get; set; }
         public int RoomFloor { get; set; }
-        public int RoomType { get; set; }
+        public RoomType RoomType { get; set; }
         [DefaultValue("false")]
         public bool IsReserved { get; set; }
 

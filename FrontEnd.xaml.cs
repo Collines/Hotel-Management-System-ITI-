@@ -1,28 +1,17 @@
-﻿using HotelManagementSystem.Context;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+using System.Configuration;
+using System.Data;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WPFCustomMessageBox;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+//using Dapper;
 
 namespace HotelManagementSystem
 {
@@ -66,7 +55,7 @@ namespace HotelManagementSystem
         {
             if (SelectedReservation != null)
             {
-                var Rooms = DB.Rooms./*AsNoTracking().*/IgnoreQueryFilters().Where(R => R.RoomFloor == SelectedReservation.Room.RoomFloor
+                var Rooms = DB.Rooms.IgnoreQueryFilters().Where(R => R.RoomFloor == SelectedReservation.Room.RoomFloor
                                                                     && (R.RoomType == SelectedReservation.Room.RoomType)).ToList();
                 if (Rooms != null)
                 {
@@ -79,10 +68,10 @@ namespace HotelManagementSystem
                 }
                 return;
             }
-            int? selectedRoomType = RoomTypeCombo?.SelectedIndex;
+            RoomType? selectedRoomType = (RoomType)RoomTypeCombo?.SelectedIndex;
             if (selectedRoomType != null && Floor != null && Floor.SelectedIndex > 0)
             {
-                var Rooms = DB.Rooms./*AsNoTracking().*/Where(R => R.RoomFloor == Floor.SelectedIndex
+                var Rooms = DB.Rooms.Where(R => R.RoomFloor == Floor.SelectedIndex
                                                                     && (R.RoomType == selectedRoomType)).ToList();
                 if (Rooms != null)
                 {
@@ -431,15 +420,23 @@ namespace HotelManagementSystem
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            var Reservations = DB.Reservations.IgnoreQueryFilters().Include(R => R.Guest).Include(R=>R.Room).Where(
-            R => 
-            R.Guest.FirstName.Contains(SearchTextBox.Text) ||
-            R.Guest.LastName.Contains(SearchTextBox.Text) ||
-            R.Room.RoomNumber.Contains(SearchTextBox.Text)).ToList();
+            IDbConnection d = new SqlConnection(ConfigurationManager.ConnectionStrings["FrontendConnection"].ConnectionString);
+            var x = d.Query<dynamic>($"SELECT Re.*,G.FirstName,G.LastName,G.Email,R.RoomNumber FROM Reservations Re INNER JOIN Guests G "+
+                                $"ON G.GuestID = Re.GuestID INNER JOIN Rooms R "+
+                                $"ON R.RoomID = Re.RoomID "+
+                                $"WHERE  G.FirstName LIKE '%{SearchTextBox.Text}%' OR  G.LastName LIKE '%{SearchTextBox.Text}%' OR R.roomNumber LIKE '%{SearchTextBox.Text}%'"
+                                            
+                );
 
-            if (Reservations != null && Reservations.Count>0)
+            //var Reservations = /*DB.Reservations.IgnoreQueryFilters().Include(R => R.Guest).Include(R=>R.Room)*/x.Where(
+            //R => 
+            //R.Guest.FirstName.Contains(SearchTextBox.Text) ||
+            //R.Guest.LastName.Contains(SearchTextBox.Text) ||
+            //R.Room.RoomNumber.Contains(SearchTextBox.Text)).ToList();
+
+            if (/*Reservations*/x != null/* && *//*Reservations*//*x.Count>0*/)
             {
-                SearchGrid.ItemsSource = Reservations;
+                SearchGrid.ItemsSource = x.ToList()/*Reservations*/;
                 SearchGrid.Visibility= Visibility.Visible;
                 noresult.Visibility = Visibility.Hidden;
             }
@@ -464,9 +461,10 @@ namespace HotelManagementSystem
 
         private void LoadRoomAvailability()
         {
-            DB.Rooms.IgnoreQueryFilters().Load();
-            var AvailableRooms = DB.Rooms.Local.Where(R => !R.IsReserved).ToList();
-            var UnavailableRooms = DB.Rooms.Local.Where(R => R.IsReserved).ToList();
+            IDbConnection d = new SqlConnection(ConfigurationManager.ConnectionStrings["FrontendConnection"].ConnectionString);
+            //DB.Rooms.IgnoreQueryFilters().Load();
+            var AvailableRooms = /*DB.Rooms.Local.Where(R => !R.IsReserved).ToList();*/ d.Query<Room>("Select * from Rooms where isreserved=0");
+            var UnavailableRooms =/* DB.Rooms.Local.Where(R => R.IsReserved).ToList();*/d.Query<Room>("Select * from Rooms where isreserved=1");
             ReservedGrid.ItemsSource = UnavailableRooms;
             Free.ItemsSource = AvailableRooms;
         }
