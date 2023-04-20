@@ -34,11 +34,7 @@
                 <StackPanel Panel.ZIndex="100">
                     <Label Padding="10,0,0,0" FontSize="40">Frontend</Label>
                 </StackPanel>
-                <StackPanel Margin="1050,0,0,0"  Orientation="Horizontal" HorizontalAlignment="Right" Height="42">
-                    <Button x:Name="MinimizeBtn" Padding="5,0,5,0" Margin="0,0,5,3">Test</Button>
-                    <Button x:Name="ResizeBtn" Padding="5,0,5,0" Margin="0,0,5,3">
-                        <Image Source="/Images/resize.jpg" />
-                    </Button>
+                <StackPanel Margin="1090,0,0,0"  Orientation="Horizontal" HorizontalAlignment="Right" Height="42">
                     <Button x:Name="CloseBtn" Click="CloseBtn_Click"
                         Padding="5,0,5,0"
                         Background="White"
